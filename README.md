@@ -1,1 +1,1 @@
-Python module to work with Herchel Extragalactic Legacy Project data.
+Python module to work with Herschel Extragalactic Legacy Project data.
