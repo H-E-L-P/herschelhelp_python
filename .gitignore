@@ -2,3 +2,4 @@ herschelhelp.egg-info/
 __pycache__
 *.pyc
 .idea/
+herschelhelp/data.db
