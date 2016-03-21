@@ -1,2 +1,1 @@
-AKARI-NEP_MOC.fits SPIRE-NEP_MOC.fits and SSDF_MOC.fits are preliminary
-coverages.
+AKARI-NEP_MOC.fits and SPIRE-NEP_MOC.fits are preliminary coverages.
