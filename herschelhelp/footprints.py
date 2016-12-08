@@ -33,9 +33,12 @@ def compute_coverages(footprint):
 
     for field in get_field():
         LOGGER.debug("Computing %s coverage...", field.name)
-        intersection = footprint.intersection(field.footprint)
-        result[field.name] = round(
-            100. * intersection.area_sq_deg / field.footprint.area_sq_deg,
-            ndigits=1)
+        intersection_area = (
+            100. * footprint.intersection(field.footprint).area /
+            field.footprint.area)
+        if intersection_area < 0.1:
+            result[field.name] = round(intersection_area, ndigits=2)
+        else:
+            result[field.name] = round(intersection_area, ndigits=1)
 
     return result
