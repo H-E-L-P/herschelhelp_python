@@ -66,9 +66,9 @@ def mocfromdepth(k, psw, output):
 
     coverage_dict = {}
 
-    if k:
+    if k is not None:
         coverage_dict['K'] = k
-    if psw:
+    if psw is not None:
         coverage_dict['PSW'] = psw
 
     if len(coverage_dict) == 0:
