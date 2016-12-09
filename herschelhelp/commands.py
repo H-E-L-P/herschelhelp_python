@@ -46,10 +46,12 @@ def covbymoc(moc_file):
 
 @cli.command(short_help="Gets the MOC corresponding to depth criteria")
 @click.option('-k', default=None, type=float, help="K limiting magnitude.")
+@click.option('--psw', default=None, type=float, help="SPIRE250 5 sigma "\
+              "limiting magnitude.")
 @click.option('--output', default="coverage.fits",
               help="Name of the output FITS file containing the MOC "\
               "(coverage.fits by default).")
-def mocfromdepth(k, output):
+def mocfromdepth(k, psw, output):
     """Produce the MOC corresponding to depth constraints.
 
     Given some constraints on the depth of the data (see options below) this
@@ -66,6 +68,8 @@ def mocfromdepth(k, output):
 
     if k:
         coverage_dict['K'] = k
+    if psw:
+        coverage_dict['PSW'] = psw
 
     if len(coverage_dict) == 0:
         raise click.BadParameter("You must provide at least one depth limit. "
