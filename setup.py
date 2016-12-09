@@ -13,6 +13,7 @@ REQUIREMENTS = [
     'astropy',
     'click',
     'pymoc',
+    'pyvo',
     'sqlalchemy',
 ]
 
