@@ -99,6 +99,13 @@ def add_filters():
             facility = _get_field("Facility")
             instrument = _get_field("Instrument")
 
+            # Notes added by HELP
+            try:
+                notes = filter_vo.get_field_by_id("AdditionalProcessing")\
+                    .description.replace("\n", "")
+            except KeyError:
+                notes = None
+
             # Filter response curve
             wave_unit = filter_vo.get_field_by_id("Wavelength").unit
             wave = filter_vo.array['Wavelength'].data * wave_unit
@@ -117,7 +124,7 @@ def add_filters():
 
             database.session.add(
                 Filter(filter_id, description, band_name, facility, instrument,
-                       mean_wavelength, att_ebv, response)
+                       mean_wavelength, att_ebv, response, notes)
             )
 
         database.session.commit()

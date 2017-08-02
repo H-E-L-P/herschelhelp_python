@@ -7,7 +7,7 @@ import numpy as np
 
 import pkg_resources
 
-from sqlalchemy import Column, Float, PickleType, String, create_engine
+from sqlalchemy import Column, Float, PickleType, String, Text, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
@@ -67,6 +67,7 @@ class Filter(BASE):
     - response: The filter response curve as a two axis numpy array with the
       wavelength in Angstrom in the first axis and the energetic transmission
       in the second one.
+    - notes: Notes from the HELP project.
 
     """
 
@@ -80,9 +81,10 @@ class Filter(BASE):
     mean_wavelength = Column(Float)
     att_ebv = Column(Float)
     response = Column(PickleType)
+    notes = Column(Text)
 
     def __init__(self, filter_id, description, band_name, facility, instrument,
-                 mean_wavelength, att_ebv, response):
+                 mean_wavelength, att_ebv, response, notes):
         """Create a photometric filter.
 
         Parameters
@@ -105,6 +107,8 @@ class Filter(BASE):
         response: numpy array of float
             Response curve of the filter, response[0] is the wavelength in
             Angstrom and transmission_curve[1] is the energetic transmission.
+        notes: string
+            Notes about the filter is any.
         """
         self.filter_id = filter_id
         self.description = description
@@ -114,6 +118,7 @@ class Filter(BASE):
         self.mean_wavelength = mean_wavelength
         self.att_ebv = att_ebv
         self.response = response
+        self.notes = notes
 
 
 class Database(object):
