@@ -2,9 +2,12 @@
 
 import logging
 import os
+
+import numpy as np
+
 import pkg_resources
 
-from sqlalchemy import Column, PickleType, String, create_engine
+from sqlalchemy import Column, Float, PickleType, String, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
@@ -42,6 +45,75 @@ class Field(BASE):
         self.name = name
         self.short_id = short_id
         self.footprint = footprint
+
+
+class Filter(BASE):
+    """Photometric filters
+
+    This class represents a photometric filter in HELP database. A filter has
+    these attributes:
+
+    - filter_id: A unique identifier.  It is used in naming the column in HELP
+      catalogues.
+    - description: A human readable short description of the filter.
+    - band_name: A standard representation for the band (e.g. “g” for a g band
+      filter).
+    - facility: The name of the observatory or telescope.
+    - instrument: The name of the instrument.
+    - mean_wavelength: The mean wavelength in Angstrom.
+    - att_ebv: The ratio between the attenuation in the filter and the E(B-V)
+      color excess. It is computed using the Fitzpatrick (1999) extinction
+      curve assuming a flat emission spectrum.
+    - response: The filter response curve as a two axis numpy array with the
+      wavelength in Angstrom in the first axis and the energetic transmission
+      in the second one.
+
+    """
+
+    __tablename__ = 'filters'
+
+    filter_id = Column(String, primary_key=True)
+    description = Column(String)
+    band_name = Column(String)
+    facility = Column(String)
+    instrument = Column(String)
+    mean_wavelength = Column(Float)
+    att_ebv = Column(Float)
+    response = Column(PickleType)
+
+    def __init__(self, filter_id, description, band_name, facility, instrument,
+                 mean_wavelength, att_ebv, response):
+        """Create a photometric filter.
+
+        Parameters
+        ----------
+        filter_id: string
+            Unique identfier.
+        description: string
+            Human readable short description of the filter.
+        band_name: string
+            Standard representation of the band.
+        facility: string
+            Observatory or telescope.
+        instrument: string
+            Instrument name.
+        mean_wavelength: float
+            Mean wavelength of the filter in Angstrom.
+        att_ebv: float
+            Ratio between the attenuation in the filter and the E(B-V) color
+            excess.
+        response: numpy array of float
+            Response curve of the filter, response[0] is the wavelength in
+            Angstrom and transmission_curve[1] is the energetic transmission.
+        """
+        self.filter_id = filter_id
+        self.description = description
+        self.band_name = band_name
+        self.facility = facility
+        self.instrument = instrument
+        self.mean_wavelength = mean_wavelength
+        self.att_ebv = att_ebv
+        self.response = response
 
 
 class Database(object):
@@ -85,7 +157,7 @@ def get_field(*args):
     """Retrieves HELP fields information.
 
     This function retrieves information about HELP fields in the database. The
-    return depends of the arguments.
+    return depends on the arguments.
 
     - If there is only one argument, the function returns the field
       corresponding to the name given in argument. If there is no field with
@@ -124,3 +196,40 @@ def get_field(*args):
             return d.session.query(Field).filter(
                 Field.name.in_(args)).all()
 
+
+def get_filters(*args):
+    """Retrieves HELP photometric filters information.
+
+    This function retrieves information about the photometric filters used in
+    HELP.  The return depends on the arguments.
+
+    - If there is only one argument, the function returns the filter
+      corresponding to the filter ID given in argument. If there is no filter
+      with that ID, None is returned.
+    - If there are several arguments, the function return the list of filters
+      corresponding to the given IDs. If none of the given IDs correspond to
+      actual filters, an empty list is returned.
+    - If no argument is given, the function returns the list of all the filters
+      in the database.
+
+    Parameters
+    ----------
+    *args : str
+        ID or IDs (several arguments, not a list) of the filters.
+
+    Returns
+    -------
+    Filter or list of Filters
+        If exactly one argument is given returns a Filter (or None) else
+        returns a list of filters.
+
+    """
+
+    with Database() as d:
+        if len(args) == 0:
+            return d.session.query(Filter).all()
+        elif len(args) == 1:
+            return d.session.query(Filter).get(args[0])
+        else:
+            return d.session.query(Filter).filter(
+                Filter.filter_id.in_(args)).all()
