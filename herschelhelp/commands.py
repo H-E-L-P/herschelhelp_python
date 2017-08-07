@@ -7,6 +7,7 @@ from astropy.table import Table
 from pymoc import MOC
 
 from .depth_coverage import get_depth_coverage
+from .filters import get_filter_meta_table
 from .footprints import compute_coverages
 
 
@@ -79,3 +80,21 @@ def mocfromdepth(k, psw, output):
         result.write(output)
         print("The corresponding area was saved to {}. It covers {} square " \
               "degrees.".format(output, result.area_sq_deg))
+
+
+@cli.command(short_help="Generate CSV file with filter information.")
+@click.option('-f', default="help_filters.csv", type=str,
+              help="Name of the CSV file (help_filters.csv by default).")
+def filter_meta(f):
+    """Save filter information to a CSV file.
+
+    This command creates a CSV file containing the information on the various
+    filters used in HELP.
+
+    """
+    if os.path.isfile(f):
+        raise click.BadOptionUsage("The file {} already exists.".format(f))
+
+    filter_table = get_filter_meta_table()
+    filter_table.sort('mean_wavelength')
+    filter_table.write(f, format='ascii.csv')
