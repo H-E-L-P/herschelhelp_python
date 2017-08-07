@@ -7,7 +7,7 @@ from astropy.table import Table
 from pymoc import MOC
 
 from .depth_coverage import get_depth_coverage
-from .filters import get_filter_meta_table
+from .filters import export_to_cigale, get_filter_meta_table
 from .footprints import compute_coverages
 
 
@@ -98,3 +98,24 @@ def filter_meta(f):
     filter_table = get_filter_meta_table()
     filter_table.sort('mean_wavelength')
     filter_table.write(f, format='ascii.csv')
+
+
+@cli.command(short_help="Generate filter files for CIGALE.")
+@click.option('-d', default="filters", type=str,
+              help="Directory where to store the filter files."
+                   " Must not exist.")
+def filter_export_cigale(d):
+    """Export HELP filters to be used with CIGALE.
+
+    This command export the filters used within HELP to files that can be
+    imported in CIGALE for SED fitting.
+
+    """
+    if os.path.isdir(d):
+        raise click.BadOptionUsage(
+            "The directory {} already exists.".format(d))
+    if os.path.isfile(d):
+        raise click.BadOptionUsage("A file named {} exists".format(d))
+
+    os.mkdir(d)
+    export_to_cigale(d)
