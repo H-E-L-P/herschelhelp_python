@@ -7,7 +7,7 @@ from astropy.table import Table
 from pymoc import MOC
 
 from .depth_coverage import get_depth_coverage
-from .filters import export_to_cigale, get_filter_meta_table
+from .filters import export_to_cigale, export_to_eazy, get_filter_meta_table
 from .footprints import compute_coverages
 
 
@@ -119,3 +119,33 @@ def filter_export_cigale(d):
 
     os.mkdir(d)
     export_to_cigale(d)
+
+
+@cli.command(short_help="Generate filter files for EAZY.")
+@click.argument("filename", metavar="<filename>")
+def filter_export_eazy(filename):
+    """Export HELP filters to be used with EAZY.
+
+    This command export the HELP filters used within HELP to files that can be
+    used with EAZY for photometric redshift computation.  It's argument is the
+    name of the catalogue file that will be processed by EASY.  It must be in
+    the HELP format with the aperture flux and error columns as f_ap_<band>
+    and ferr_ap_<band>.
+
+    Three new files will be created based on the filename of this table:
+    - <filename>.res containing the responses of the used filters;
+    - <filename>.translate associating the table columns to their filter;
+    - <filename>.info containing additional information on the filters.
+
+    """
+    if os.path.exists("{}.res".format(filename)):
+        raise click.BadArgumentUsage(
+            "The file {}.res already exists".format(filename))
+    if os.path.exists("{}.translate".format(filename)):
+        raise click.BadArgumentUsage(
+            "The file {}.translate already exists".format(filename))
+    if os.path.exists("{}.info".format(filename)):
+        raise click.BadArgumentUsage(
+            "The file {}.info already exists".format(filename))
+
+    export_to_eazy(filename)
