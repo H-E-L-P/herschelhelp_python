@@ -33,9 +33,9 @@ def get_filter_meta_table():
 
 
 def export_to_cigale(directory):
-    """Export the HELP filter database to CIGALE compatible files
+    """Export the HELP filter database to CIGALE compatible files.
 
-    This function export the filter transmission profiles to filtes (one per
+    This function export the filter transmission profiles to files (one per
     filter) that can be imported in CIGALE and be used in SED fitting.
 
     Parameters
