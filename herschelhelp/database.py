@@ -7,7 +7,8 @@ import numpy as np
 
 import pkg_resources
 
-from sqlalchemy import Column, Float, PickleType, String, Text, create_engine
+from sqlalchemy import (Column, Float, Integer, PickleType, String, Text,
+                        create_engine)
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
@@ -78,7 +79,7 @@ class Filter(BASE):
     band_name = Column(String)
     facility = Column(String)
     instrument = Column(String)
-    mean_wavelength = Column(Float)
+    mean_wavelength = Column(Integer)
     att_ebv = Column(Float)
     response = Column(PickleType)
     notes = Column(Text)
@@ -99,7 +100,7 @@ class Filter(BASE):
             Observatory or telescope.
         instrument: string
             Instrument name.
-        mean_wavelength: float
+        mean_wavelength: int
             Mean wavelength of the filter in Angstrom.
         att_ebv: float
             Ratio between the attenuation in the filter and the E(B-V) color

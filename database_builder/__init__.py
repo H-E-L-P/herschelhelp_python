@@ -115,12 +115,14 @@ def add_filters():
             # Attenuation in the filter / E(B-V)
             att_ebv = (np.trapz(transmission * _f99_extinction(wave), wave) /
                        np.trapz(transmission, wave))
+            att_ebv = np.round(att_ebv, 3)
 
             # Computing the mean wavelength because not all filters may
             # provide it.
             mean_wavelength = (
                 np.trapz(response[1] * response[0], response[0]) /
                 np.trapz(response[1], response[0]))
+            mean_wavelength = int(np.round(mean_wavelength))
 
             database.session.add(
                 Filter(filter_id, description, band_name, facility, instrument,
