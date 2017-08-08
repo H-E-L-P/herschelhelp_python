@@ -3,11 +3,13 @@
 import os
 
 import click
+from astropy.io.registry import IORegistryError
 from astropy.table import Table
 from pymoc import MOC
 
 from .depth_coverage import get_depth_coverage
-from .filters import export_to_cigale, export_to_eazy, get_filter_meta_table
+from .filters import (correct_galactic_extinction, export_to_cigale,
+                      export_to_eazy, get_filter_meta_table)
 from .footprints import compute_coverages
 
 
@@ -149,3 +151,36 @@ def filter_export_eazy(filename):
             "The file {}.info already exists".format(filename))
 
     export_to_eazy(filename)
+
+
+@cli.command(short_help="Correct a catalogue for galactic extinction.")
+@click.argument("filename", metavar="<filename>")
+def correct_for_extinction(filename):
+    """Correct HELP catalogue for galactic extinction.
+
+    This command takes a HELP formatted catalogue and correct its fluxes and
+    magnitudes for galactic extinction using the E(B-V) information associated
+    with each source.  The catalogue must have an ebv column and the fluxes and
+    magnitudes columns are identified using the HELP column format (f_<filter>,
+    ferr_filter, f_ap_<filter>, ...).
+
+    Column associated with filters that are not in the HELP database will not
+    be corrected and an error message will be logged with the name of the
+    missing filters.
+
+    The corrected catalogue will be save as <filename>_corrected.fits.
+
+    """
+    new_name = "{}_corrected.fits".format(os.path.splitext(filename)[0])
+
+    if os.path.exists(new_name):
+        raise click.UsageError("{} already exists.".format(new_name))
+
+    # TODO: Find a way to deal with not readable ascii files
+    try:
+        catalogue = Table.read(filename)
+    except IORegistryError:
+        catalogue = Table.read(filename, format='ascii')
+
+    correct_galactic_extinction(catalogue, inplace=True)
+    catalogue.write(new_name)

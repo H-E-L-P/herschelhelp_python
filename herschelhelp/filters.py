@@ -143,3 +143,85 @@ def export_to_eazy(analysed_table):
                         filt.description,
                         filt.mean_wavelength,
                         filt.att_ebv))
+
+
+def correct_galactic_extinction(catalogue, inplace=False):
+    """Correct photometric catalogue for galactic extinction.
+
+    This function takes a photometric catalogue in the HELP format and correct
+    the fluxes and magnitudes for the galactic extinction given the E(B-V)
+    value associated with each source.  The catalogue must have an ebv column
+    and the fluxes and magnitudes columns are identified using the HELP column
+    format (f_<filter>, ferr_filter, f_ap_<filter>, ...).
+
+    Column associated with filters that are not in the HELP database will not
+    be corrected and an error message will be logged with the name of the
+    missing filters.
+
+    If the inplace option is set to True, the initial table will be modified
+    and nothing will be returned, if it's set to False, the function will work
+    on a copy of the initial table and return the corrected version.
+
+    Parameters
+    ----------
+    catalogue: astropy.table.Table
+        The catalogue to be corrected.
+
+    Returns
+    -------
+    astropy.table.Table
+        The corrected catalogue if inplace is True.
+
+    """
+    if not inplace:
+        catalogue = catalogue.copy()
+
+    try:
+        ebv = catalogue['ebv']
+    except KeyError:
+        raise KeyError("The catalogue is missing the ebv column.")
+
+    # Instead of logging an error message for each missing band and problematic
+    # column, lets just log a summary.
+    missing_band, prob_columns = set(), set()
+
+    for column in catalogue.colnames:
+
+        band = None
+        if column.startswith('f_ap_') or column.startswith('m_ap_'):
+            band = column[5:]
+        elif column.startswith('ferr_ap_') or column.startswith('merr_ap_'):
+            band = column[8:]
+        elif column.startswith('f_') or column.startswith('m_'):
+            band = column[2:]
+        elif column.startswith('ferr_') or column.startswith('merr_'):
+            band = column[5:]
+
+        if band is None:
+            LOGGER.debug("Column %s is not associated with any band",
+                         column)
+        else:
+            filt = get_filters(band)
+
+            if filt is None:
+                missing_band.add(band)
+                prob_columns.add(column)
+            else:
+                att = filt.att_ebv * ebv
+
+                if column.startswith("f"):
+                    catalogue[column] *= 10**(att/2.5)
+                elif column.startswith("merr"):
+                    # Error in magnitude is not affected by extinction.
+                    pass
+                else:
+                    catalogue[column] -= att
+
+    if len(missing_band) > 0:
+        LOGGER.error("The filters are missing in the database: %s.\n"
+                     "The are present in these columns: %s.",
+                     ", ".join(sorted(missing_band)),
+                     ", ".join(sorted(prob_columns)))
+
+    if not inplace:
+        return catalogue
