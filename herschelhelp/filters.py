@@ -81,9 +81,10 @@ def export_to_eazy(analysed_table):
 
     """
 
-    response_filename = "{}.res".format(analysed_table)
-    translate_filename = "{}.translate".format(analysed_table)
-    info_filename = "{}.info".format(analysed_table)
+    response_filename = "{}.res".format(os.path.splitext(analysed_table)[0])
+    translate_filename = "{}.translate".format(
+        os.path.splitext(analysed_table)[0])
+    info_filename = "{}.info".format(os.path.splitext(analysed_table)[0])
 
     if os.path.exists(response_filename):
         raise IOError("{} file exists.".format(response_filename))
