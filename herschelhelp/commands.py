@@ -182,5 +182,5 @@ def correct_for_extinction(filename):
     except IORegistryError:
         catalogue = Table.read(filename, format='ascii')
 
-    correct_galactic_extinction(catalogue, inplace=True)
+    catalogue = correct_galactic_extinction(catalogue, inplace=True)
     catalogue.write(new_name)

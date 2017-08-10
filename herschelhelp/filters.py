@@ -163,14 +163,14 @@ def correct_galactic_extinction(catalogue, inplace=False):
     catalogue: astropy.table.Table
         The catalogue to be corrected.
     inplace: boolean
-        It true, the initial table will be modified and nothing will be
-        returned.  If false, the function will work on a copy of the table and
-        return the corrected version.
+        If inplace is set to True, the function will not make a copy of the
+        input catalogue.  This will save some memory space at the expense of
+        modifying the input catalogue.
 
     Returns
     -------
     astropy.table.Table
-        The corrected catalogue if inplace is True.
+        The corrected catalogue.
 
     """
     if not inplace:
@@ -223,5 +223,4 @@ def correct_galactic_extinction(catalogue, inplace=False):
                      ", ".join(sorted(missing_band)),
                      ", ".join(sorted(prob_columns)))
 
-    if not inplace:
-        return catalogue
+    return catalogue
