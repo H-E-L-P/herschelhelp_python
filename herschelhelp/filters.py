@@ -158,14 +158,14 @@ def correct_galactic_extinction(catalogue, inplace=False):
     be corrected and an error message will be logged with the name of the
     missing filters.
 
-    If the inplace option is set to True, the initial table will be modified
-    and nothing will be returned, if it's set to False, the function will work
-    on a copy of the initial table and return the corrected version.
-
     Parameters
     ----------
     catalogue: astropy.table.Table
         The catalogue to be corrected.
+    inplace: boolean
+        It true, the initial table will be modified and nothing will be
+        returned.  If false, the function will work on a copy of the table and
+        return the corrected version.
 
     Returns
     -------
