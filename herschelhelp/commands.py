@@ -8,6 +8,7 @@ from astropy.table import Table
 from pymoc import MOC
 
 from .depth_coverage import get_depth_coverage
+from .external import convert_table_for_cigale
 from .filters import (correct_galactic_extinction, export_to_cigale,
                       export_to_eazy, get_filter_meta_table)
 from .footprints import compute_coverages
@@ -183,4 +184,49 @@ def correct_for_extinction(filename):
         catalogue = Table.read(filename, format='ascii')
 
     catalogue = correct_galactic_extinction(catalogue, inplace=True)
+    catalogue.write(new_name)
+
+
+@cli.command(short_help="Convert an HELP catalogue to be processed by CIGALE.")
+@click.option("-c", "--cor_ext", is_flag=True,
+              help="Correct the catalogue for galactic extinction. The ebv "
+              "column must be present.")
+@click.argument("filename", metavar="<filename>")
+def tocigale(cor_ext, filename):
+    """Convert an HELP catalogue to be processed by CIGALE.
+
+    CIGALE has different requirement for its input catalogues as the standard
+    for HELP catalogue.  This command converts a catalogue from HELP to be
+    processed by CIGALE:
+
+    - The “help_id” column is renamed to “id”;
+
+    - Only the total flux columns are kept;
+
+    - The flux and error columns are renamed to <filter> and <filter>_err;
+
+    - The fluxes that are flagged not to be used in SED fitting as set to Nan;
+
+    - The fluxes are converted to mJy.
+
+    """
+    if cor_ext:
+        new_name = "{}_cigale_extcor.fits".format(
+            os.path.splitext(filename)[0])
+    else:
+        new_name = "{}_cigale.fits".format(os.path.splitext(filename)[0])
+
+    if os.path.exists(new_name):
+        raise click.UsageError("{} already exists.".format(new_name))
+
+    # TODO: Find a way to deal with not readable ascii files
+    try:
+        catalogue = Table.read(filename)
+    except IORegistryError:
+        catalogue = Table.read(filename, format='ascii')
+
+    if cor_ext:
+        catalogue = correct_galactic_extinction(catalogue, inplace=True)
+
+    catalogue = convert_table_for_cigale(catalogue)
     catalogue.write(new_name)
