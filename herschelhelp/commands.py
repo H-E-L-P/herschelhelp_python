@@ -171,7 +171,7 @@ def correct_for_extinction(filename):
     The corrected catalogue will be save as <filename>_corrected.fits.
 
     """
-    new_name = "{}_corrected.fits".format(os.path.splitext(filename)[0])
+    new_name = "{}_extcor.fits".format(os.path.splitext(filename)[0])
 
     if os.path.exists(new_name):
         raise click.UsageError("{} already exists.".format(new_name))
