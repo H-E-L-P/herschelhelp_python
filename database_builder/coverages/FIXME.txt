@@ -1,1 +1,0 @@
-AKARI-NEP_MOC.fits and SPIRE-NEP_MOC.fits are preliminary coverages.
