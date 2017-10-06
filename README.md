@@ -15,7 +15,7 @@ run:
 ```Shell
 $ conda create -n herschelhelp python=3
 $ source activate herschelhelp
-$ conda install astropy click sqlalchemy
+$ conda install astropy click sqlalchemy scipy
 $ pip install -r requirements.txt
 $ python setup.py develop
 $ python database_builder/__init__.py
