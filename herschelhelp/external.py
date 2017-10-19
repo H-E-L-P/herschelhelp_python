@@ -74,8 +74,6 @@ def convert_table_for_cigale(catalogue, inplace=False):
         try:
             band_flag = catalogue['flag_{}'.format(band)]
         except KeyError:
-            LOGGER.warning("The column flag_%s is not present in the "
-                           "catalogue to indicate fluxes not to use.", band)
             band_flag = None
 
         # Total flux
