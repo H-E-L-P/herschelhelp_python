@@ -62,6 +62,10 @@ class Filter(BASE):
     - facility: The name of the observatory or telescope.
     - instrument: The name of the instrument.
     - mean_wavelength: The mean wavelength in Angstrom.
+    - min_wavelength: First wavelength (in Angstrom) with a transmission at
+      least 1% of the maximum transmission.
+    - max_wavelength: Last wavelength (in Angstrom) with a transmission at
+      least 1% of the maximum transmission.
     - att_ebv: The ratio between the attenuation in the filter and the E(B-V)
       color excess. It is computed using the Fitzpatrick (1999) extinction
       curve assuming a flat emission spectrum.
@@ -80,12 +84,15 @@ class Filter(BASE):
     facility = Column(String)
     instrument = Column(String)
     mean_wavelength = Column(Integer)
+    min_wavelength = Column(Integer)
+    max_wavelength = Column(Integer)
     att_ebv = Column(Float)
     response = Column(PickleType)
     notes = Column(Text)
 
     def __init__(self, filter_id, description, band_name, facility, instrument,
-                 mean_wavelength, att_ebv, response, notes):
+                 mean_wavelength, min_wavelength, max_wavelength, att_ebv,
+                 response, notes):
         """Create a photometric filter.
 
         Parameters
@@ -102,6 +109,12 @@ class Filter(BASE):
             Instrument name.
         mean_wavelength: int
             Mean wavelength of the filter in Angstrom.
+        min_wavelength: int
+            Minimal wavelength with at least 1% of maximum transmission in
+            Angstrom.
+        max_wavelength: int
+            Last wavelength with at least 1% of maximum transmission in
+            Angstrom.
         att_ebv: float
             Ratio between the attenuation in the filter and the E(B-V) color
             excess.
@@ -117,6 +130,8 @@ class Filter(BASE):
         self.facility = facility
         self.instrument = instrument
         self.mean_wavelength = mean_wavelength
+        self.min_wavelength = min_wavelength
+        self.max_wavelength = max_wavelength
         self.att_ebv = att_ebv
         self.response = response
         self.notes = notes

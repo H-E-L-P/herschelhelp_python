@@ -26,7 +26,8 @@ def get_filter_meta_table():
 
     # List of filter attributes to put in the table
     attributes = ['filter_id', 'description', 'band_name', 'facility',
-                  'instrument', 'mean_wavelength', 'att_ebv', 'notes']
+                  'instrument', 'mean_wavelength', 'min_wavelength',
+                  'max_wavelength', 'att_ebv', 'notes']
     all_filters = get_filters()
 
     table_columns = []
