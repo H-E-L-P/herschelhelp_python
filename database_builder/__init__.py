@@ -122,7 +122,6 @@ def add_filters():
             mean_wavelength = (
                 np.trapz(response[1] * response[0], response[0]) /
                 np.trapz(response[1], response[0]))
-            mean_wavelength = int(np.round(mean_wavelength))
 
             # Computing the min and max wavelength with are the first and last
             # wavelength with at least 1% of the maximal transmission (we took
@@ -130,8 +129,8 @@ def add_filters():
             min_wave_idx, max_wave_idx = np.where(
                 response[1] > .01 * np.max(response[1])
             )[0][[0, -1]]
-            min_wavelength = int(np.round(response[0][min_wave_idx]))
-            max_wavelength = int(np.round(response[0][max_wave_idx]))
+            min_wavelength = response[0][min_wave_idx]
+            max_wavelength = response[0][max_wave_idx]
 
             database.session.add(
                 Filter(filter_id, description, band_name, facility, instrument,
