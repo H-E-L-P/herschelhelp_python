@@ -10,6 +10,10 @@ FILTER_MEAN_LAMBDAS = {
     item['filter_id']: item['mean_wavelength'] for item in
     get_filter_meta_table()
 }
+FILTER_MIN_LAMBDAS = {
+    item['filter_id']: item['min_wavelength'] for item in
+    get_filter_meta_table()
+}
 
 logging.basicConfig(level=logging.getLevelName(os.getenv('LOG_LEVEL', 'INFO')))
 LOGGER = logging.getLogger(__name__)
@@ -21,9 +25,11 @@ def convert_table_for_cigale(catalogue, inplace=False):
     This function converts a HELP formated catalogue to a CIGALE formated one:
 
     - The “help_id” column is renamed to “id”;
-    - Only the total flux columns are kept;
+    - Only the total flux columns are kept plus some interesting columns;
     - The flux and error columns are renamed to <filter> and <filter>_err;
-    - The fluxes that are flagged not to be used in SED fitting as set to Nan;
+    - The fluxes that are flagged not to be used in SED fitting as set to NaN;
+    - For each band, for the sources at a redshift for which the Lyman limit
+      interfere with the filter bandpass, the flux is set to NaN.
     - The fluxes are converted to mJy.
 
     Parameters
@@ -93,6 +99,21 @@ def convert_table_for_cigale(catalogue, inplace=False):
         else:
             LOGGER.warning("The catalogue is missing the ferr_%s column.",
                            band)
+
+        # Set to NaN the fluxes in the filters that overlap or are below the
+        # Lyman break limit at the source redshift.
+        if band in FILTER_MEAN_LAMBDAS:
+            lyman_limit_at_z = 912 * (1 + catalogue['redshift'])
+            below_ly = np.where(FILTER_MIN_LAMBDAS[band] < lyman_limit_at_z)[0]
+            if len(below_ly) > 0:
+                catalogue[band][below_ly] = np.nan
+                if 'ferr_{}'.format(band) in catalogue.colnames:
+                    catalogue['{}_err'.format(band)][below_ly] = np.nan
+                LOGGER.info("For %s sources, the band %s should not be used "
+                            "because it overlaps or is below the Lyman limit "
+                            "at the redshift of these sources. These fluxes "
+                            "were set to NaN.",
+                            len(below_ly), band)
 
     # Keep only the column we want
     return catalogue[columns]
