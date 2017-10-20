@@ -205,6 +205,8 @@ def tocigale(remove_zerofluxes, cor_ext, filename):
 
     - Only the total flux columns are kept;
 
+    - Only the source with a redhift are kept;
+
     - The flux and error columns are renamed to <filter> and <filter>_err;
 
     - The fluxes that are flagged not to be used in SED fitting as set to Nan;
