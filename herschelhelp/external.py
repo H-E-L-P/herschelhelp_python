@@ -118,7 +118,11 @@ def convert_table_for_cigale(catalogue, inplace=False,
         # Lyman break limit at the source redshift.
         if band in FILTER_MEAN_LAMBDAS:
             lyman_limit_at_z = 912 * (1 + catalogue['redshift'])
-            below_ly = np.where(FILTER_MIN_LAMBDAS[band] < lyman_limit_at_z)[0]
+            # Temporary silent invalid comparison warning because the flux
+            # array contains NaN.
+            with np.errstate(invalid='ignore'):
+                below_ly = np.where(
+                    FILTER_MIN_LAMBDAS[band] < lyman_limit_at_z)[0]
             if len(below_ly) > 0:
                 catalogue[band][below_ly] = np.nan
                 if 'ferr_{}'.format(band) in catalogue.colnames:
