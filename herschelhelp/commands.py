@@ -209,6 +209,8 @@ def tocigale(cor_ext, filename):
 
     - The fluxes are converted to mJy.
 
+    - For each source, when a filter bandpass overlaps (or is below) the Lyman
+      limit at the source redshift, the flux and error are set to NaN.
     """
     if cor_ext:
         new_name = "{}_cigale_extcor.fits".format(
