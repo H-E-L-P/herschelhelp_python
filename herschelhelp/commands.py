@@ -191,8 +191,10 @@ def correct_for_extinction(filename):
 @click.option("-c", "--cor_ext", is_flag=True,
               help="Correct the catalogue for galactic extinction. The ebv "
               "column must be present.")
+@click.option("-z", "--remove_zerofluxes", is_flag=True,
+              help="Set flux and error to NaN for fluxes equal to 0.")
 @click.argument("filename", metavar="<filename>")
-def tocigale(cor_ext, filename):
+def tocigale(remove_zerofluxes, cor_ext, filename):
     """Convert an HELP catalogue to be processed by CIGALE.
 
     CIGALE has different requirement for its input catalogues as the standard
@@ -211,6 +213,14 @@ def tocigale(cor_ext, filename):
 
     - For each source, when a filter bandpass overlaps (or is below) the Lyman
       limit at the source redshift, the flux and error are set to NaN.
+
+    Optionally:
+
+    - The catalogue canremove_zero_fluxes be corrected for galactic extinction;
+
+    - The fluxes which are equals to 0 can be removed as this may indicate an
+      upper limit that should be dealt in a more specific way by CIGALE.
+
     """
     if cor_ext:
         new_name = "{}_cigale_extcor.fits".format(
@@ -230,5 +240,6 @@ def tocigale(cor_ext, filename):
     if cor_ext:
         catalogue = correct_galactic_extinction(catalogue, inplace=True)
 
-    catalogue = convert_table_for_cigale(catalogue)
+    catalogue = convert_table_for_cigale(catalogue, inplace=True,
+                                         remove_zerofluxes=remove_zerofluxes)
     catalogue.write(new_name)
