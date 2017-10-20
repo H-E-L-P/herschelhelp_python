@@ -11,7 +11,8 @@ from sqlalchemy import Column, Float, PickleType, String, Text, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-logging.basicConfig(level=logging.getLevelName(os.getenv('LOG_LEVEL', 'INFO')))
+logging.basicConfig(level=logging.getLevelName(
+    os.getenv('LOG_LEVEL', 'WARNING')))
 LOGGER = logging.getLogger(__name__)
 
 DATABASE_FILE = pkg_resources.resource_filename(__name__, "data.db")

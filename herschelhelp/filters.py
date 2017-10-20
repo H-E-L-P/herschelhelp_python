@@ -8,7 +8,8 @@ from astropy.table import Column, Table
 
 from .database import get_filters
 
-logging.basicConfig(level=logging.getLevelName(os.getenv('LOG_LEVEL', 'INFO')))
+logging.basicConfig(level=logging.getLevelName(
+    os.getenv('LOG_LEVEL', 'WARNING')))
 LOGGER = logging.getLogger(__name__)
 
 

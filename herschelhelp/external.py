@@ -15,7 +15,8 @@ FILTER_MIN_LAMBDAS = {
     get_filter_meta_table()
 }
 
-logging.basicConfig(level=logging.getLevelName(os.getenv('LOG_LEVEL', 'INFO')))
+logging.basicConfig(level=logging.getLevelName(
+    os.getenv('LOG_LEVEL', 'WARNING')))
 LOGGER = logging.getLogger(__name__)
 
 
