@@ -95,6 +95,7 @@ def convert_table_for_cigale(catalogue, inplace=False,
             band_flag = None
 
         # Total flux
+        LOGGER.debug("Converting %s flux to mJy.", band)
         catalogue['f_{}'.format(band)].name = band
         catalogue[band] /= 1000.  # μJy to mJy
         if band_flag is not None:
@@ -102,6 +103,7 @@ def convert_table_for_cigale(catalogue, inplace=False,
         columns.append(band)
 
         # Error
+        LOGGER.debug("Converting %s flux error to mJy.", band)
         if 'ferr_{}'.format(band) in catalogue.colnames:
             catalogue['ferr_{}'.format(band)].name = '{}_err'.format(band)
             catalogue['{}_err'.format(band)] /= 1000.  # μJy to mJy
@@ -114,6 +116,7 @@ def convert_table_for_cigale(catalogue, inplace=False,
 
         # 0 fluxes
         if remove_zerofluxes:
+            LOGGER.debug("Remove %s fluxes equal to 0.", band)
             mask = ~np.isnan(catalogue[band])
             mask[mask] &= (catalogue[band][mask] == 0)
             catalogue[band][mask] = np.nan
@@ -123,6 +126,7 @@ def convert_table_for_cigale(catalogue, inplace=False,
         # Set to NaN the fluxes in the filters that overlap or are below the
         # Lyman break limit at the source redshift.
         if band in FILTER_MEAN_LAMBDAS:
+            LOGGER.debug("Removing %s fluxes affected by Lyman limit.", band)
             lyman_limit_at_z = 912 * (1 + catalogue['redshift'])
             below_ly = np.where(FILTER_MIN_LAMBDAS[band] < lyman_limit_at_z)[0]
             if len(below_ly) > 0:
