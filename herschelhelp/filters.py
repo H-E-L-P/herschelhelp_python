@@ -3,6 +3,7 @@
 import logging
 import os
 
+from astropy.io import fits
 from astropy.io.registry import IORegistryError
 from astropy.table import Column, Table
 
@@ -95,13 +96,21 @@ def export_to_eazy(analysed_table):
     if os.path.exists(info_filename):
         raise IOError("{} file exists.".format(info_filename))
 
+    # If the table is a FITS file, we use astropy.io.fits so that we can deal
+    # with huge files without loading them in memory.
     # TODO: Find a way to deal with not readable ascii files
-    try:
-        catalogue = Table.read(analysed_table)
-    except IORegistryError:
-        catalogue = Table.read(analysed_table, format='ascii')
+    if analysed_table.endswith(".fits") or analysed_table.endswith(".fit"):
+        with fits.open(analysed_table) as hdulist:
+            column_names = hdulist[1].columns.names
+    else:
+        try:
+            catalogue = Table.read(analysed_table)
+        except IORegistryError:
+            catalogue = Table.read(analysed_table, format='ascii')
+        column_names = catalogue.colnames
 
-    catalogue_bands = [col[5:] for col in catalogue.colnames
+    # EAZY uses aperture fluxes.
+    catalogue_bands = [col[5:] for col in column_names
                        if col.startswith('f_ap_')]
 
     with open(response_filename, 'w') as filter_responses, \
