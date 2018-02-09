@@ -1,3 +1,10 @@
+Filters
+==========================================================
+
+All filters should be in VOTable format. Where these could not be found they were converted using Astropy. Wavelengths are in Angstroms.
+
+THe URLS to download the filters are here:
+
 http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=HST/ACS_WFC.F435W_81
 http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=HST/ACS_WFC.F606W_81
 http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=HST/ACS_WFC.F775W_81
@@ -35,11 +42,12 @@ Ks?
 http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=BOK/90prime.sdss_z
 
 
-CAHA/Omega2000.J
-CAHA/Omega2000.Ks
+http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=CAHA/Omega2000.J
+http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=CAHA/Omega2000.Ks
 
-MMT/MegaCam.u_MMT
-MMT/MegaCam.g_MMT
-MMT/MegaCam.r_MMT
-MMT/MegaCam.i_MMT
-MMT/MegaCam.z_MMT
+http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=MMT/MegaCam.u_MMT
+http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=MMT/MegaCam.g_MMT
+http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=MMT/MegaCam.r_MMT
+http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=MMT/MegaCam.i_MMT
+http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=MMT/MegaCam.z_MMT
+
