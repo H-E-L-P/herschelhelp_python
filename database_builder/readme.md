@@ -3,7 +3,7 @@ Filters
 
 All filters should be in VOTable format. Where these could not be found they were converted using Astropy. Wavelengths are in Angstroms.
 
-THe URLS to download the filters are here:
+THe URLs to download the filters are here:
 
 http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=HST/ACS_WFC.F435W_81
 http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=HST/ACS_WFC.F606W_81
