@@ -38,9 +38,11 @@ THe URLs to download the filters are here:
 - [mosaic_i](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=KPNO/Mosaic.I)
 - [mosaic_b](http://www.noao.edu/noao/noaodeep/BWfilter.dat) Text format
 - [mosaic_k](http://www.noao.edu/kpno/manuals/onis/ksfilt.txt) Text format
+- [mosaic_z](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=KPNO/MOSAIC.zd_DECam) - DECam like for Legacy survey.	
 
 
-
+- [90prime_g]() - We copy the DECam g filter which this is supposed to replicate.
+- [90prime_r]() - We copy the DECam r filter which this is supposed to replicate.
 - [90prime_z](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=BOK/90prime.sdss_z)
 
 
