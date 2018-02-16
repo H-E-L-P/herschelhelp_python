@@ -41,15 +41,15 @@ THe URLs to download the filters are here:
 
 
 
--[90prime_z](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=BOK/90prime.sdss_z)
+- [90prime_z](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=BOK/90prime.sdss_z)
 
 
--[omega2k_j](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=CAHA/Omega2000.J)
--[omega2k_ks](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=CAHA/Omega2000.Ks)
+- [omega2k_j](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=CAHA/Omega2000.J)
+- [omega2k_ks](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=CAHA/Omega2000.Ks)
 
--[mmt_g](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=MMT/MegaCam.u_MMT)
--[mmt_r](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=MMT/MegaCam.g_MMT)
--[mmt_r](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=MMT/MegaCam.r_MMT)
--[mmt_i](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=MMT/MegaCam.i_MMT)
--[mmt_z](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=MMT/MegaCam.z_MMT)
+- [mmt_g](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=MMT/MegaCam.u_MMT)
+- [mmt_r](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=MMT/MegaCam.g_MMT)
+- [mmt_r](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=MMT/MegaCam.r_MMT)
+- [mmt_i](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=MMT/MegaCam.i_MMT)
+- [mmt_z](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=MMT/MegaCam.z_MMT)
 
