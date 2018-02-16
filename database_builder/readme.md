@@ -5,7 +5,7 @@ All filters should be in VOTable format. Where these could not be found they wer
 
 THe URLs to download the filters are here:
 
-http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=HST/ACS_WFC.F435W_81
+-[wfc_f435w](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=HST/ACS_WFC.F435W_81)
 http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=HST/ACS_WFC.F606W_81
 http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=HST/ACS_WFC.F775W_81
 http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=HST/ACS_WFC.F814W_81
@@ -36,8 +36,10 @@ http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=CFHT/Wircam.Ks
 
 http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=KPNO/Mosaic.R
 http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=KPNO/Mosaic.I
-Bw?
+http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=KPNO/Mosaic.Bw?
 Ks?
+
+http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=KPNO/Mosaic.B
 
 http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=BOK/90prime.sdss_z
 
