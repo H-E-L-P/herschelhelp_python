@@ -17,6 +17,11 @@ THe URLs to download the filters are here:
 - [wfc3_f160w](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=HST/WFC3_IR.F160W)
 - [wfc3_f140w](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=HST/WFC3_IR.F140W)
 
+For HST NICMOS I take NICMOS1 from SVO out of 3. Is this correct?
+
+- [nicmos_f110w](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=HST/NICMOS1.F110W)
+- [nicmos_f160w](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=HST/NICMOS1.F160W)
+
 - [isaac_ks](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=Paranal/ISAAC.Ks)
 - [hawki_ks](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=Paranal/HAWKI.Ks)
 
@@ -29,6 +34,7 @@ Should rename suprime to hsc when it is such.
 
 - [suprime_b](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=Subaru/Suprime.B)
 - [suprime_v](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=Subaru/Suprime.V)
+- [suprime_rp(http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=Subaru/Suprime.SDSS_r)
 - [suprime_rc](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=Subaru/Suprime.Rc)
 - [suprime_ip](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=Subaru/Suprime.SDSS_i)
 - [suprime_zp](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=Subaru/Suprime.SDSS_z) - SVO
