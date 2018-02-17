@@ -15,6 +15,7 @@ THe URLs to download the filters are here:
 - [wfc3_f105w](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=HST/WFC3_IR.F105W)
 - [wfc3_f125w](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=HST/WFC3_IR.F125W)
 - [wfc3_f160w](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=HST/WFC3_IR.F160W)
+- [wfc3_f140w](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=HST/WFC3_IR.F140W)
 
 - [isaac_ks](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=Paranal/ISAAC.Ks)
 - [hawki_ks](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=Paranal/HAWKI.Ks)
@@ -23,16 +24,46 @@ THe URLs to download the filters are here:
 - [newfirm_h](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=NOAO/NEWFIRM.HX)
 - [newfirm_k](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=NOAO/NEWFIRM.KX)
 
+
+Should rename suprime to hsc when it is such.
+
 - [suprime_b](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=Subaru/Suprime.B)
 - [suprime_v](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=Subaru/Suprime.V)
 - [suprime_rc](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=Subaru/Suprime.Rc)
 - [suprime_ip](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=Subaru/Suprime.SDSS_i)
-- [suprime_zp](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=Subaru/Suprime.SDSS_z)
+- [suprime_zp](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=Subaru/Suprime.SDSS_z) - SVO
+- [suprime_zp](http://www.astro.caltech.edu/~capak/filters/z_subaru.res) - also above
+- [suprime_zpp](http://www.astro.caltech.edu/~capak/filters/suprime_FDCCD_z.res)
 
+- [suprime_ia427](http://www.astro.caltech.edu/~capak/filters/IB427.SuprimeCam.pb) - Strange naming diff between ia and ib
+- [suprime_ia484](http://www.astro.caltech.edu/~capak/filters/IB484.SuprimeCam.pb)
+- [suprime_ia527](http://www.astro.caltech.edu/~capak/filters/IB527.SuprimeCam.pb)
+- [suprime_ia624](http://www.astro.caltech.edu/~capak/filters/IB624.SuprimeCam.pb)
+- [suprime_ia679](http://www.astro.caltech.edu/~capak/filters/IB679.SuprimeCam.pb)
+- [suprime_ia738](http://www.astro.caltech.edu/~capak/filters/IB738.SuprimeCam.pb)
+- [suprime_ia767](http://www.astro.caltech.edu/~capak/filters/IB767.SuprimeCam.pb)
+- [suprime_ib427](http://www.astro.caltech.edu/~capak/filters/IB427.SuprimeCam.pb)
+- [suprime_ib464](http://www.astro.caltech.edu/~capak/filters/IB464.SuprimeCam.pb)
+- [suprime_ib505](http://www.astro.caltech.edu/~capak/filters/IB505.SuprimeCam.pb)
+- [suprime_ib574](http://www.astro.caltech.edu/~capak/filters/IB574.SuprimeCam.pb)
+- [suprime_ib709](http://www.astro.caltech.edu/~capak/filters/IB709.SuprimeCam.pb)
+- [suprime_ib827](http://www.astro.caltech.edu/~capak/filters/IB827.SuprimeCam.pb)
+
+
+
+- [suprime_nb711](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=Subaru/Suprime.NB711)
+- [suprime_nb816](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=Subaru/Suprime.NB816)
+
+CFHT
 - [wircam_j](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=CFHT/Wircam.Y)
 - [wircam_j](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=CFHT/Wircam.J)
 - [wircam_h](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=CFHT/Wircam.H)
 - [wircam_ks](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=CFHT/Wircam.Ks)
+- [cfht12k_b](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=CFHT/CFH12k.B)
+- [cfht12k_r](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=CFHT/CFH12k.R)
+- [cfht12k_i](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=CFHT/CFH12k.I)
+
+- [moircs_ks](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=Subaru/MOIRCS.Ks) - There is also a K. Take care.
 
 - [mosaic_r](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=KPNO/Mosaic.R)
 - [mosaic_i](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=KPNO/Mosaic.I)
@@ -54,4 +85,7 @@ THe URLs to download the filters are here:
 - [mmt_r](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=MMT/MegaCam.r_MMT)
 - [mmt_i](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=MMT/MegaCam.i_MMT)
 - [mmt_z](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=MMT/MegaCam.z_MMT)
+
+- [aegis_j](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=P200/WIRC.Jcont)
+- [aegis_k](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=P200/WIRC.Ks) - actually Ks should possibly be renamed.
 
