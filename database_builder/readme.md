@@ -92,7 +92,8 @@ CFHT
 - [mmt_i](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=MMT/MegaCam.i_MMT)
 - [mmt_z](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=MMT/MegaCam.z_MMT)
 
-VOICE ESO numbers (from http://www.eso.org/sci/facilities/lasilla/instruments/wfi/inst/filters.html) B/99:ESO842, B/123:ESO878, V/89:ESO843, Rc/162:ESO844
+VOICE ESO numbers (from http://www.eso.org/sci/facilities/lasilla/instruments/wfi/inst/filters.html) B/99:ESO842, B/123:ESO878, V/89:ESO843, Rc/162:ESO844.
+These are from LaSilla WFI and are already in the database. We therefore deleted the following and don't use them anymore.
 - [voice_b99](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=LaSilla/WFI.ESO842)
 - [voice_b123](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=LaSilla/WFI.ESO878)
 - [voice_v](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=LaSilla/WFI.ESO843)
