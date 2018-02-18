@@ -92,6 +92,12 @@ CFHT
 - [mmt_i](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=MMT/MegaCam.i_MMT)
 - [mmt_z](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=MMT/MegaCam.z_MMT)
 
-- [aegis_j](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=P200/WIRC.Jcont)
-- [aegis_k](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=P200/WIRC.Ks) - actually Ks should possibly be renamed.
+VOICE ESO numbers (from http://www.eso.org/sci/facilities/lasilla/instruments/wfi/inst/filters.html) B/99:ESO842, B/123:ESO878, V/89:ESO843, Rc/162:ESO844
+- [voice_b99](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=LaSilla/WFI.ESO842)
+- [voice_b123](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=LaSilla/WFI.ESO878)
+- [voice_v](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=LaSilla/WFI.ESO843)
+- [voice_r](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=LaSilla/WFI.ESO844)
+
+- [wircs_j](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=P200/WIRC.Jcont)
+- [wircs_k](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=P200/WIRC.Ks) - actually Ks should possibly be renamed.
 
