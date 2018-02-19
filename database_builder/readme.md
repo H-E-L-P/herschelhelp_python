@@ -30,7 +30,7 @@ For HST NICMOS I take NICMOS1 from SVO out of 3. Is this correct?
 - [newfirm_k](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=NOAO/NEWFIRM.KX)
 
 
-Should rename suprime to hsc when it is such.
+Should rename suprime to hsc when it is such. At present suprime_g,r,i,z,y are HyperSuprimeCam and all others are SuprimeCam.
 
 - [suprime_b](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=Subaru/Suprime.B)
 - [suprime_v](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=Subaru/Suprime.V)
@@ -65,12 +65,15 @@ CFHT
 - [wircam_j](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=CFHT/Wircam.J)
 - [wircam_h](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=CFHT/Wircam.H)
 - [wircam_ks](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=CFHT/Wircam.Ks)
+
 - [cfht12k_b](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=CFHT/CFH12k.B)
 - [cfht12k_r](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=CFHT/CFH12k.R)
 - [cfht12k_i](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=CFHT/CFH12k.I)
 
 - [moircs_ks](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=Subaru/MOIRCS.Ks) - There is also a K. Take care.
+- [moircs_k](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=Subaru/MOIRCS.K)
 
+- [mosaic_u](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=KPNO/Mosaic.U)
 - [mosaic_r](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=KPNO/Mosaic.R)
 - [mosaic_i](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=KPNO/Mosaic.I)
 - [mosaic_b](http://www.noao.edu/noao/noaodeep/BWfilter.dat) Text format
