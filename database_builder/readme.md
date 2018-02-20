@@ -34,7 +34,7 @@ Should rename suprime to hsc when it is such. At present suprime_g,r,i,z,y are H
 
 - [suprime_b](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=Subaru/Suprime.B)
 - [suprime_v](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=Subaru/Suprime.V)
-- [suprime_rp(http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=Subaru/Suprime.SDSS_r)
+- [suprime_rp](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=Subaru/Suprime.SDSS_r)
 - [suprime_rc](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=Subaru/Suprime.Rc)
 - [suprime_ip](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=Subaru/Suprime.SDSS_i)
 - [suprime_zp](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=Subaru/Suprime.SDSS_z) - SVO
@@ -59,6 +59,10 @@ Should rename suprime to hsc when it is such. At present suprime_g,r,i,z,y are H
 
 - [suprime_nb711](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=Subaru/Suprime.NB711)
 - [suprime_nb816](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=Subaru/Suprime.NB816)
+
+HSC
+- [suprime_n816](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=Subaru/HSC.NB816_filter)
+
 
 CFHT
 - [wircam_j](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=CFHT/Wircam.Y)
@@ -97,8 +101,8 @@ CFHT
 
 VOICE ESO numbers (from http://www.eso.org/sci/facilities/lasilla/instruments/wfi/inst/filters.html) B/99:ESO842, B/123:ESO878, V/89:ESO843, Rc/162:ESO844.
 These are from LaSilla WFI and are already in the database. We therefore deleted the following and don't use them anymore.
-- [voice_b99](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=LaSilla/WFI.ESO842)
-- [voice_b123](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=LaSilla/WFI.ESO878)
+- [voice_b](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=LaSilla/WFI.ESO842) - Voice B/99
+- [voice_b123](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=LaSilla/WFI.ESO878) - Voice B/123
 - [voice_v](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=LaSilla/WFI.ESO843)
 - [voice_r](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=LaSilla/WFI.ESO844)
 
