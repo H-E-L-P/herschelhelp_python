@@ -30,8 +30,16 @@ For HST NICMOS I take NICMOS1 from SVO out of 3. Is this correct?
 - [newfirm_k](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=NOAO/NEWFIRM.KX)
 
 
-Should rename suprime to hsc when it is such. At present suprime_g,r,i,z,y are HyperSuprimeCam and all others are SuprimeCam.
+Should rename suprime to hsc when it is such. At present suprime_g,r,i,z,y are HyperSuprimeCam and all others are SuprimeCam. The following are Subaru HSC filters. The download links below are for the filter only. The files in teh database were corrected by Ken.
+- [suprime_g](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=Subaru/HSC.g_filter)
+- [suprime_r](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=Subaru/HSC.r_filter)
+- [suprime_i](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=Subaru/HSC.i_filter)
+- [suprime_z](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=Subaru/HSC.z_filter)
+- [suprime_y](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=Subaru/HSC.y_filter)
+- [suprime_n921](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=Subaru/HSC.NB921_filter)
+- [suprime_n816](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=Subaru/HSC.NB816_filter)
 
+The following are Subaru Suprime filters:
 - [suprime_b](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=Subaru/Suprime.B)
 - [suprime_v](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=Subaru/Suprime.V)
 - [suprime_rp](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=Subaru/Suprime.SDSS_r)
@@ -59,9 +67,6 @@ Should rename suprime to hsc when it is such. At present suprime_g,r,i,z,y are H
 
 - [suprime_nb711](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=Subaru/Suprime.NB711)
 - [suprime_nb816](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=Subaru/Suprime.NB816)
-
-HSC
-- [suprime_n816](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=Subaru/HSC.NB816_filter)
 
 
 CFHT
