@@ -98,6 +98,9 @@ CFHT
 - [omega2k_j](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=CAHA/Omega2000.J)
 - [omega2k_ks](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=CAHA/Omega2000.Ks)
 
+- [lbcb_u](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=LBT/LBCB.bessel-U)
+- [lbcb_y](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=LBT/LBCR.Y)
+
 - [mmt_g](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=MMT/MegaCam.u_MMT)
 - [mmt_r](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=MMT/MegaCam.g_MMT)
 - [mmt_r](http://svo2.cab.inta-csic.es/theory/fps/fps.php?ID=MMT/MegaCam.r_MMT)
