@@ -33,6 +33,10 @@ tasks. Running the command alone will show the list of available (sub)commands.
 Running `herschelhelp <COMMAND> --help` will display the help on the given
 command.
 
+*Note for macOS users: to be able to use the command line, the locale of the
+system must be set to an UTF-8 one, see [this
+page](http://click.pocoo.org/5/python3/#python3-surrogates).*
+
 Running inside a Jupyter notebook
 ---------------------------------
 
