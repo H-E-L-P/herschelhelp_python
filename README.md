@@ -50,7 +50,7 @@ $ conda install notebook
 and add the environment Python to the list of kernels for Jupyter:
 
 ```Shell
-$ python -m ipykernel install --user --name helpint --display-name "Python (herschelhelp_internal)"
+$ python -m ipykernel install --user --name helpint --display-name "Python (herschelhelp_python)"
 ```
 
 The notebooks must be set to use this kernel.
