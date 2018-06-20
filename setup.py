@@ -2,8 +2,8 @@
 
 import os
 
-from distutils.command.build import build
-from setuptools import find_packages, setup
+from distutils.command.build_py import build_py
+from setuptools import setup
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 with open(os.path.join(HERE, 'README.md')) as f:
@@ -18,14 +18,14 @@ REQUIREMENTS = [
 ]
 
 
-class CustomBuild(build):
+class CustomBuild(build_py):
     """Build class to build the database"""
     def run(self):
         # Build the databse
         import database_builder
         database_builder.build_base()
         # Process with the standard build
-        build.run(self)
+        build_py.run(self)
 
 setup(
     name="herschelhelp",
@@ -36,8 +36,10 @@ setup(
     author_email="yannick.roehlly@lam.fr",
     license='MIT',
     install_requires=REQUIREMENTS,
-    packages=find_packages(exclude=['database_builder']),
-    cmdclass={'build': CustomBuild},
+    packages=['herschelhelp'],
+    package_dir={'herschelhelp': 'herschelhelp'},
+    package_data={'herschelhelp': ['data.db']},
+    cmdclass={'build_py': CustomBuild},
     entry_points='''
         [console_scripts]
         herschelhelp=herschelhelp.commands:cli
