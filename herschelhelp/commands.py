@@ -49,37 +49,34 @@ def covbymoc(moc_file):
 
 
 @cli.command(short_help="Gets the MOC corresponding to depth criteria")
-@click.option('-k', default=None, type=float, help="K limiting magnitude.")
-@click.option('--psw', default=None, type=float, help="SPIRE250 5 sigma "\
-              "limiting magnitude.")
-@click.option('--output', default="coverage.fits",
+@click.option('--limit', '-l', type=(str, float), multiple=True,
+              help="Limit criterion: filter, limit")
+@click.option('--output', '-o', default="coverage.fits",
               help="Name of the output FITS file containing the MOC "\
               "(coverage.fits by default).")
-def mocfromdepth(k, psw, output):
+def mocfromdepth(limit, output):
     """Produce the MOC corresponding to depth constraints.
 
-    Given some constraints on the depth of the data (see options below) this
-    command produce a Multi-Order Coverage map (MOC) of the corresponding area.
-    The programme connects to the HELP Virtual Observatory server to get the
-    information.
+    Given a list of bands and maximum error, this command produces
+    a Multi-Order Coverage map (MOC) of the corresponding area. The programme
+    connects to the HELP Virtual Observatory to get the information.
+
+    Example
+    -------
+    $ herschelhelp mocfromdetph --limit irac_i1 2 --limit 90prime_g 10
+
+    Will get the area covered by IRAC I1 band and 90Prime g band, with
+    a maximum depth of 10 μJy in the former and 10 μJy in the later.
 
     """
-
     if os.path.isfile(output):
         raise click.BadOptionUsage("The file {} already exists".format(output))
 
-    coverage_dict = {}
-
-    if k is not None:
-        coverage_dict['K'] = k
-    if psw is not None:
-        coverage_dict['PSW'] = psw
-
-    if len(coverage_dict) == 0:
+    if len(limit) == 0:
         raise click.BadParameter("You must provide at least one depth limit. "
                                  "See herschelhelp mocfromdepth --help.")
     else:
-        result = get_depth_coverage(coverage_dict)
+        result = get_depth_coverage(dict(limit))
         result.write(output)
         print("The corresponding area was saved to {}. It covers {} square " \
               "degrees.".format(output, result.area_sq_deg))
