@@ -38,7 +38,6 @@ def get_depth_coverage(coverage_limits):
 
     query = ("select top 100000000 hp_idx_O_13 from  depth.main where " +
              where_clause)
-    print(query)
 
     vo_result = vo.tablesearch(
         "http://vohedamtest.lam.fr/__system__/tap/run/tap", query).table
