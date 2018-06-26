@@ -32,7 +32,7 @@ def get_depth_coverage(coverage_limits):
     """
 
     where_clause = ' and '.join([
-        f"ferr_{band}_mean < {error} " for band, error in
+        "ferr_%s_mean < %s " % (band, error) for band, error in
         coverage_limits.items()
     ])
 
