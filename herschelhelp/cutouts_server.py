@@ -6,7 +6,8 @@ import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 import glob
 import os
-import urllib2, cookielib
+import urllib
+import http.cookiejar as cookielib
 
 from astropy.nddata import Cutout2D
 from astropy.coordinates import SkyCoord
@@ -16,7 +17,7 @@ from astropy.wcs import WCS
 import astropy.io.fits as fits
 from astropy.table import Table
 
-import cutouts_dl as cdl
+from . import cutouts_dl as cdl
 
 
 ##############################################################################
@@ -58,13 +59,13 @@ def cutout_scale(im, num_min = 2.0, num_max = 5.0):
     
 
 def urlfile_exists(location):
-   import urllib2
+   import urllib
    
    if location != "":
        try:
-           ret = urllib2.urlopen(location)
+           ret = urllib.request.urlopen(location)
            return True
-       except urllib2.HTTPError:
+       except urllib.request.HTTPError:
             return False
        except ValueError:
             return False

@@ -2,7 +2,8 @@
 from __future__ import print_function   # to use print() as a function in Python 2
 
 import os
-import urllib2, urllib, re, cookielib
+import urllib, re
+import http.cookiejar as cookielib
 import numpy as np
 from astropy import table
 from astropy.table import Table
@@ -56,7 +57,7 @@ def twomass_dl(ra, dec, band, getFullIm=False, width_as=20.,\
     print("   Get the url of the fits file ...")
     ## Get  ordate, hemisphere, scanno, and fname
     url_search = "https://irsa.ipac.caltech.edu/ibe/search/twomass/allsky/allsky?POS=" + str(ra) + "," + str(dec)
-    datas = urllib2.urlopen(url_search).readlines()
+    datas = urllib.request.urlopen(url_search).readlines()
     t = ascii.read(datas)
     if len(t) > 0:
         t = t[0]
@@ -173,8 +174,8 @@ def cfht_dl(ra, dec, band, instrument="MegaPrime", optFiltersGen='both', getFull
     AND  ( Plane.quality_flag IS NULL OR Plane.quality_flag != 'junk' ) )""".format(str(ra), str(dec), instrument, filterID)
     
     urlQuery = "http://www.cadc-ccda.hia-iha.nrc-cnrc.gc.ca/AdvancedSearch/tap/sync?LANG=ADQL&REQUEST=doQuery&USEMAQ=true&" +\
-                urllib.urlencode({"QUERY":query, "FORMAT":"csv"}) 
-    datas = urllib2.urlopen(urlQuery).read()
+                urllib.parse.urlencode({"QUERY":query, "FORMAT":"csv"}) 
+    datas = urllib.request.urlopen(urlQuery).read()
     t = ascii.read(datas, header_start=0, delimiter=',')
     # Available to download
     try:
@@ -200,7 +201,7 @@ def cfht_dl(ra, dec, band, instrument="MegaPrime", optFiltersGen='both', getFull
             fname = "{}_CFHT-{}-{}_{:.0f}arcsec.fits.fz".format(radec_str, productID, band, width_as)
             FitsOutputPath = FitsOutputPath + radec_str[0:4] + "/"
             try:
-                res = urllib2.urlopen(urlIm)
+                res = urllib.request.urlopen(urlIm)
                 break
             except:
                 urlIm = ""
@@ -428,7 +429,7 @@ def flsKPNO_dl(ra, dec, width_as=20., FitsOutputPath="/data/fls_kpno/", saveFITS
     ## Get the cutouts
     url_search = "https://irsa.ipac.caltech.edu/cgi-bin/Cutouts/nph-cutouts?mission={}&units=arcsecg&locstr={:f}+{:f}&sizeX={:.2f}&min_size=1&max_size=180&{}&mode=PI".format(mission, ra, dec, width_as, tbl)
     
-    root = ET.parse(urllib2.urlopen(url_search)).getroot()
+    root = ET.parse(urllib.request.urlopen(url_search)).getroot()
     
     allfits = []
     for txt in root.findall("images/cutouts/fits"):
@@ -562,11 +563,11 @@ def hsc_dl(ra, dec, band, width_as=20., login=[], FitsOutputPath="/data/hsc/", s
         fname = fname[8:-1]
         
     ## HTTP AUthentification
-    p = urllib2.HTTPPasswordMgrWithDefaultRealm()
+    p = urllib.request.HTTPPasswordMgrWithDefaultRealm()
     p.add_password(None, filename, username, password)
-    handler = urllib2.HTTPBasicAuthHandler(p)
-    opener = urllib2.build_opener(handler)
-    urllib2.install_opener(opener)
+    handler = urllib.request.HTTPBasicAuthHandler(p)
+    opener = urllib.request.build_opener(handler)
+    urllib.request.install_opener(opener)
     
     ## Save the fits image
     if saveFITS:
@@ -819,7 +820,7 @@ def ps1_dl(ra, dec, band, radec_str, projcell=None, subcell=None, getFullIm=Fals
     ## Get skycellid and projectionid
     if projcell == None:
         url_filenames = "http://ps1images.stsci.edu/cgi-bin/ps1filenames.py?ra=" + str(ra) + "&dec=" + str(dec)
-        datas = urllib2.urlopen(url_filenames).readlines()
+        datas = urllib.request.urlopen(url_filenames).readlines()
         
         if len(datas) > 1:
             spilt_datas = datas[1].split(" ")
@@ -893,8 +894,8 @@ def sdss_dl(ra, dec, band, dr=12, objid=None, FitsOutputPath="/data/sdss/", save
         sqlQuery = "SELECT run,rerun,camcol,field FROM photoobjall WHERE objid={}".format(objid)
     
     urlQuery = "http://skyserver.sdss.org/dr{}/SkyserverWS/SearchTools/SqlSearch?{}".format(dr,\
-                                   urllib.urlencode({'cmd':sqlQuery,'format':'csv'}))
-    datas = urllib2.urlopen(urlQuery).readlines()
+                                   urllib.parse.urlencode({'cmd':sqlQuery,'format':'csv'}))
+    datas = urllib.request.urlopen(urlQuery).readlines()
     t = ascii.read(datas)
     
     if len(t) > 0:
@@ -994,7 +995,7 @@ def spitzer_dl(ra, dec, band, width_as=20., dataset="SEIP", FitsOutputPath="/dat
             url_search = "https://irsa.ipac.caltech.edu/cgi-bin/Atlas/nph-atlas?mission=SGOODS&locstr={:f}+{:f}&regSize={:f}&covers=on&radius=0.05&radunits=deg&searchregion=on&mode=PI".format(ra, dec, width_deg)
         xmlTags = "images/metadata"
     
-    root = ET.parse(urllib2.urlopen(url_search)).getroot()
+    root = ET.parse(urllib.request.urlopen(url_search)).getroot()
     
     allfits = []
     for txt in root.findall(xmlTags):
@@ -1086,11 +1087,11 @@ def uhs_dl(ra, dec, band, wsaLogin=[], database="UHSDR1", width_as=20.,\
     ## Login to UHS (Not compulsory, data puplic since 01/08/2018)
     if len(wsaLogin) !=0:
         login_url = "http://wsa.roe.ac.uk:8080/wsa/DBLogin?community=+&user={}&passwd={}&community2=UHS".format(wsaLogin[0], wsaLogin[1])
-        response=urllib2.urlopen(login_url)
-        request=urllib2.Request(login_url)
+        response=urllib.request.urlopen(login_url)
+        request=urllib.request.Request(login_url)
         cj=cookielib.CookieJar()
         cj.extract_cookies(response, request)
-        opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
+        opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(cj))
 
     ## 1/ GetImage cut-out results
     width_am = width_as / 60.
@@ -1100,7 +1101,7 @@ def uhs_dl(ra, dec, band, wsaLogin=[], database="UHSDR1", width_as=20.,\
     if len(wsaLogin) !=0:
         res = opener.open(getImage).read()
     else:
-        res = urllib2.urlopen(getImage).read()
+        res = urllib.request.urlopen(getImage).read()
 
     links = re.findall('href="(http://.*?)"', res)
         
@@ -1234,11 +1235,11 @@ def vista_dl(ra, dec, band, wsaLogin=[], survey="VHS", database="VHSDR5", width_
     if len(wsaLogin) !=0:
         login_url = "http://horus.roe.ac.uk:8080/vdfs/DBLogin?archive=VSA&community=&user={}&passwd={}&community2={}".format(wsaLogin[0],\
                              wsaLogin[1], wsaLogin[2])
-        response=urllib2.urlopen(login_url)
-        request=urllib2.Request(login_url)
+        response=urllib.request.urlopen(login_url)
+        request=urllib.request.Request(login_url)
         cj=cookielib.CookieJar()
         cj.extract_cookies(response, request)
-        opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
+        opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(cj))
 
     # 1/ GetImage cut-out results
     width_am = width_as / 60.
@@ -1249,7 +1250,7 @@ def vista_dl(ra, dec, band, wsaLogin=[], survey="VHS", database="VHSDR5", width_
     if len(wsaLogin) != 0:
         res = opener.open(getImage).read()
     else:
-        res = urllib2.urlopen(getImage).read()
+        res = urllib.request.urlopen(getImage).read()
 
     links = re.findall('href="(http://.*?)"', res)
             
