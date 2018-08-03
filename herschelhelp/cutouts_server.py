@@ -6,9 +6,6 @@ import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 import glob
 import os
-import urllib
-import http.cookiejar as cookielib
-
 from astropy.nddata import Cutout2D
 from astropy.coordinates import SkyCoord
 import astropy.units as u
@@ -59,16 +56,22 @@ def cutout_scale(im, num_min = 2.0, num_max = 5.0):
     
 
 def urlfile_exists(location):
-   import urllib
-   
-   if location != "":
-       try:
-           ret = urllib.request.urlopen(location)
-           return True
-       except urllib.request.HTTPError:
-            return False
-       except ValueError:
-            return False
+    try:
+        import urllib2
+        httpErr = urllib2.HTTPError
+    except:
+        import urllib
+        import urllib.request as urllib2
+        httpErr = urllib.error.HTTPError
+
+    if location != "":
+        try:
+            ret = urllib2.urlopen(location)
+            return True
+        except httpErr:
+             return False
+        except ValueError:
+             return False
 
    
 def rd_fits(filename, ra, dec, hdrNum=1, width_as=20., pixelscale=None, hdrKey_pixelscale=None, smooth=False):

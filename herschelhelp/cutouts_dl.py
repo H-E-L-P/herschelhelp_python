@@ -1,9 +1,15 @@
 # Python 2/3 compatibility
 from __future__ import print_function   # to use print() as a function in Python 2
 
-import os
+import os, sys
 import urllib, re
-import http.cookiejar as cookielib
+try:
+    import urllib2, urllib
+    import cookielib
+except:
+    import urllib
+    import urllib.request as urllib2
+    import http.cookiejar as cookielib
 import numpy as np
 from astropy import table
 from astropy.table import Table
@@ -57,8 +63,7 @@ def twomass_dl(ra, dec, band, getFullIm=False, width_as=20.,\
     print("   Get the url of the fits file ...")
     ## Get  ordate, hemisphere, scanno, and fname
     url_search = "https://irsa.ipac.caltech.edu/ibe/search/twomass/allsky/allsky?POS=" + str(ra) + "," + str(dec)
-    datas = urllib.request.urlopen(url_search).readlines()
-    t = ascii.read(datas)
+    t = ascii.read(url_search)
     if len(t) > 0:
         t = t[0]
         params = {'ordate': t["ordate"], 'hemisphere': t["hemisphere"], 'scanno': t["scanno"],\
@@ -173,10 +178,14 @@ def cfht_dl(ra, dec, band, instrument="MegaPrime", optFiltersGen='both', getFull
     AND Observation.type = 'OBJECT' 
     AND  ( Plane.quality_flag IS NULL OR Plane.quality_flag != 'junk' ) )""".format(str(ra), str(dec), instrument, filterID)
     
-    urlQuery = "http://www.cadc-ccda.hia-iha.nrc-cnrc.gc.ca/AdvancedSearch/tap/sync?LANG=ADQL&REQUEST=doQuery&USEMAQ=true&" +\
-                urllib.parse.urlencode({"QUERY":query, "FORMAT":"csv"}) 
-    datas = urllib.request.urlopen(urlQuery).read()
-    t = ascii.read(datas, header_start=0, delimiter=',')
+    if sys.version_info.major == 2:
+        urlQuery = "http://www.cadc-ccda.hia-iha.nrc-cnrc.gc.ca/AdvancedSearch/tap/sync?LANG=ADQL&REQUEST=doQuery&USEMAQ=true&" +\
+                    urllib.urlencode({"QUERY":query, "FORMAT":"csv"}) 
+    else:
+        urlQuery = "http://www.cadc-ccda.hia-iha.nrc-cnrc.gc.ca/AdvancedSearch/tap/sync?LANG=ADQL&REQUEST=doQuery&USEMAQ=true&" +\
+                    urllib.parse.urlencode({"QUERY":query, "FORMAT":"csv"})     
+
+    t = ascii.read(urlQuery, header_start=0, delimiter=',')
     # Available to download
     try:
         t = t[t['"DOWNLOADABLE"'].mask == False]
@@ -201,7 +210,7 @@ def cfht_dl(ra, dec, band, instrument="MegaPrime", optFiltersGen='both', getFull
             fname = "{}_CFHT-{}-{}_{:.0f}arcsec.fits.fz".format(radec_str, productID, band, width_as)
             FitsOutputPath = FitsOutputPath + radec_str[0:4] + "/"
             try:
-                res = urllib.request.urlopen(urlIm)
+                res = urllib2.urlopen(urlIm)
                 break
             except:
                 urlIm = ""
@@ -301,8 +310,7 @@ def decals_dl(ra, dec, band, dr=5, width_as=20., getFullIm=False, brickid=None,\
         url = "http://legacysurvey.org/viewer/fits-cutout/?ra={:f}&dec={:f}&layer=decals-dr{:d}&pixscale={}&bands={}&size={}".format(ra,\
                       dec, dr, pixelscale, band, width_pix)
         try:
-            datas = fits.getdata(filename, 0)
-            datas.close()
+            datas = fits.getdata(url, 0)
             filename = url
         except:
             print("NO DECaLS {}-BAND COVERAGE FOR THIS POSITION".format(band))
@@ -315,7 +323,7 @@ def decals_dl(ra, dec, band, dr=5, width_as=20., getFullIm=False, brickid=None,\
             FitsOutputPath = FitsOutputPath + "{}/{}/".format(brick, brickid)
         else:
             radec_str = radecStr(ra, dec, precision=1)
-            fname = "{}-{}-legacysurvey-image-{}_{:.0f}arcsec.fits".format("DECalS", radec_str, band, with_as)
+            fname = "{}-{}-legacysurvey-image-{}_{:.0f}arcsec.fits".format("DECalS", radec_str, band, width_as)
             
         if not os.path.exists(FitsOutputPath):
             os.mkdir(FitsOutputPath)
@@ -429,7 +437,7 @@ def flsKPNO_dl(ra, dec, width_as=20., FitsOutputPath="/data/fls_kpno/", saveFITS
     ## Get the cutouts
     url_search = "https://irsa.ipac.caltech.edu/cgi-bin/Cutouts/nph-cutouts?mission={}&units=arcsecg&locstr={:f}+{:f}&sizeX={:.2f}&min_size=1&max_size=180&{}&mode=PI".format(mission, ra, dec, width_as, tbl)
     
-    root = ET.parse(urllib.request.urlopen(url_search)).getroot()
+    root = ET.parse(urllib2.urlopen(url_search)).getroot()
     
     allfits = []
     for txt in root.findall("images/cutouts/fits"):
@@ -563,11 +571,11 @@ def hsc_dl(ra, dec, band, width_as=20., login=[], FitsOutputPath="/data/hsc/", s
         fname = fname[8:-1]
         
     ## HTTP AUthentification
-    p = urllib.request.HTTPPasswordMgrWithDefaultRealm()
+    p = urllib2.HTTPPasswordMgrWithDefaultRealm()
     p.add_password(None, filename, username, password)
-    handler = urllib.request.HTTPBasicAuthHandler(p)
-    opener = urllib.request.build_opener(handler)
-    urllib.request.install_opener(opener)
+    handler = urllib2.HTTPBasicAuthHandler(p)
+    opener = urllib2.build_opener(handler)
+    urllib2.install_opener(opener)
     
     ## Save the fits image
     if saveFITS:
@@ -642,6 +650,7 @@ def hst_dl(ra, dec, band, instrument="ACS", width_as=20.,\
     filename = ""
     
     for fname in fnames:
+        fname = fname.decode('utf-8')   #Python3: convert bytes to str
         urlIm = "http://hla.stsci.edu/cgi-bin/fitscut.cgi?red={}&RA={:f}&Dec={:f}&size={:d}&format=fits".format(fname, ra, dec, width_pix)
         data = fits.getdata(urlIm)
         # Check if source fully covered by the image
@@ -703,8 +712,7 @@ def legacySurvey_dl(ra, dec, band, dr=6, width_as=20.,\
                       dec, dr, pixelscale, band, width_pix)
                       
     try:
-        datas = fits.getdata(filename, 0)
-        datas.close()
+        datas = fits.getdata(url, 0)
         filename = url
     except:
         print("NO Legacy Survey {}-BAND COVERAGE FOR THIS POSITION".format(band))
@@ -717,7 +725,7 @@ def legacySurvey_dl(ra, dec, band, dr=6, width_as=20.,\
         if not os.path.exists(FitsOutputPath):
             os.mkdir(FitsOutputPath)
             
-        fname = "{}-{}-legacysurvey-image-{}_{:.0f}arcsec.fits".format("LegacySurvey", radec_str, band, with_as)    
+        fname = "{}-{}-legacysurvey-image-{}_{:.0f}arcsec.fits".format("LegacySurvey", radec_str, band, width_as)    
         filename = FitsOutputPath + fname
         os.system("wget -O {} '{}' ".format(filename, url))
 
@@ -820,7 +828,7 @@ def ps1_dl(ra, dec, band, radec_str, projcell=None, subcell=None, getFullIm=Fals
     ## Get skycellid and projectionid
     if projcell == None:
         url_filenames = "http://ps1images.stsci.edu/cgi-bin/ps1filenames.py?ra=" + str(ra) + "&dec=" + str(dec)
-        datas = urllib.request.urlopen(url_filenames).readlines()
+        datas = urllib2.urlopen(url_filenames).readlines()
         
         if len(datas) > 1:
             spilt_datas = datas[1].split(" ")
@@ -893,10 +901,13 @@ def sdss_dl(ra, dec, band, dr=12, objid=None, FitsOutputPath="/data/sdss/", save
     else:
         sqlQuery = "SELECT run,rerun,camcol,field FROM photoobjall WHERE objid={}".format(objid)
     
-    urlQuery = "http://skyserver.sdss.org/dr{}/SkyserverWS/SearchTools/SqlSearch?{}".format(dr,\
+    if sys.version_info.major == 2:
+        urlQuery = "http://skyserver.sdss.org/dr{}/SkyserverWS/SearchTools/SqlSearch?{}".format(dr,\
+                                   urllib.urlencode({'cmd':sqlQuery,'format':'csv'}))
+    else:
+        urlQuery = "http://skyserver.sdss.org/dr{}/SkyserverWS/SearchTools/SqlSearch?{}".format(dr,\
                                    urllib.parse.urlencode({'cmd':sqlQuery,'format':'csv'}))
-    datas = urllib.request.urlopen(urlQuery).readlines()
-    t = ascii.read(datas)
+    t = ascii.read(urlQuery)
     
     if len(t) > 0:
         t = t[0]
@@ -995,7 +1006,7 @@ def spitzer_dl(ra, dec, band, width_as=20., dataset="SEIP", FitsOutputPath="/dat
             url_search = "https://irsa.ipac.caltech.edu/cgi-bin/Atlas/nph-atlas?mission=SGOODS&locstr={:f}+{:f}&regSize={:f}&covers=on&radius=0.05&radunits=deg&searchregion=on&mode=PI".format(ra, dec, width_deg)
         xmlTags = "images/metadata"
     
-    root = ET.parse(urllib.request.urlopen(url_search)).getroot()
+    root = ET.parse(urllib2.urlopen(url_search)).getroot()
     
     allfits = []
     for txt in root.findall(xmlTags):
@@ -1087,11 +1098,11 @@ def uhs_dl(ra, dec, band, wsaLogin=[], database="UHSDR1", width_as=20.,\
     ## Login to UHS (Not compulsory, data puplic since 01/08/2018)
     if len(wsaLogin) !=0:
         login_url = "http://wsa.roe.ac.uk:8080/wsa/DBLogin?community=+&user={}&passwd={}&community2=UHS".format(wsaLogin[0], wsaLogin[1])
-        response=urllib.request.urlopen(login_url)
-        request=urllib.request.Request(login_url)
+        response=urllib2.urlopen(login_url)
+        request=urllib2.Request(login_url)
         cj=cookielib.CookieJar()
         cj.extract_cookies(response, request)
-        opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(cj))
+        opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
 
     ## 1/ GetImage cut-out results
     width_am = width_as / 60.
@@ -1101,13 +1112,13 @@ def uhs_dl(ra, dec, band, wsaLogin=[], database="UHSDR1", width_as=20.,\
     if len(wsaLogin) !=0:
         res = opener.open(getImage).read()
     else:
-        res = urllib.request.urlopen(getImage).read()
+        res = urllib2.urlopen(getImage).read()
 
-    links = re.findall('href="(http://.*?)"', res)
+    links = re.findall('href="(http://.*?)"', res.decode('utf-8'))
         
     if len(links) > 0:
         # 3/ Get cut-out
-        filename = links[0]
+        filename = str(links[0])
         filename = filename.replace("getImage", "getFImage", 1)
     else:
         print("NO UHS {}-BAND COVERAGE FOR THIS POSITION".format(band))
@@ -1231,15 +1242,15 @@ def vista_dl(ra, dec, band, wsaLogin=[], survey="VHS", database="VHSDR5", width_
     filterIDs = {"Z":1, "Y":2, "J":3, "H":4, "K":5}
     filterID = filterIDs[band]
     
-    ## Login to UHS access non-public data
+    ## Login to VISTA access non-public data
     if len(wsaLogin) !=0:
         login_url = "http://horus.roe.ac.uk:8080/vdfs/DBLogin?archive=VSA&community=&user={}&passwd={}&community2={}".format(wsaLogin[0],\
                              wsaLogin[1], wsaLogin[2])
-        response=urllib.request.urlopen(login_url)
-        request=urllib.request.Request(login_url)
+        response=urllib2.urlopen(login_url)
+        request=urllib2.Request(login_url)
         cj=cookielib.CookieJar()
         cj.extract_cookies(response, request)
-        opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(cj))
+        opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
 
     # 1/ GetImage cut-out results
     width_am = width_as / 60.
@@ -1250,9 +1261,9 @@ def vista_dl(ra, dec, band, wsaLogin=[], survey="VHS", database="VHSDR5", width_
     if len(wsaLogin) != 0:
         res = opener.open(getImage).read()
     else:
-        res = urllib.request.urlopen(getImage).read()
+        res = urllib2.urlopen(getImage).read()
 
-    links = re.findall('href="(http://.*?)"', res)
+    links = re.findall('href="(http://.*?)"', res.decode('utf-8'))
             
     if len(links) > 0:
         # 3/ Get cut-out
