@@ -40,7 +40,7 @@ def get_depth_coverage(coverage_limits):
              where_clause)
 
     vo_result = vo.tablesearch(
-        "http://vohedamtest.lam.fr/__system__/tap/run/tap", query).table
+        "https://herschel-vos.phys.sussex.ac.uk/__system__/tap/run/tap", query).table
 
     moc = MOC()
     if len(vo_result):
