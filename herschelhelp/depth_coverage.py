@@ -36,8 +36,7 @@ def get_depth_coverage(coverage_limits):
         coverage_limits.items()
     ])
 
-    query = ("select top 100000000 hp_idx_O_13 from  depth.main where " +
-             where_clause)
+    query = ("select hp_idx_O_13 from  depth.main where %s" % where_clause)
 
     vo_result = vo.tablesearch(
         "https://herschel-vos.phys.sussex.ac.uk/__system__/tap/run/tap",
