@@ -1,3 +1,8 @@
+"""
+    Author: Estelle Pons epons@ast.cam.ac.uk
+    Date: 2018
+"""
+
 # Python 2/3 compatibility
 from __future__ import print_function   # to use print() as a function in Python 2
 
@@ -14,7 +19,7 @@ from astropy.wcs import WCS
 import astropy.io.fits as fits
 from astropy.table import Table
 
-from . import cutouts_dl as cdl
+import cutouts_dl as cdl
 
 
 ##############################################################################
@@ -1229,16 +1234,12 @@ def cutout_ps1(ra, dec, bands=["g","r","i","z","y"], psfmags=None,
     datas = []
     
     ### Filename of fits image if save of the disk (20" cutouts)
-    full_imDir = imDir + radec_str[0:4] + "/"
-    dic_list = {'gim': glob.glob(full_imDir + radec_str + '*g.unconv.fits'), \
-                'rim': glob.glob(full_imDir + radec_str + '*r.unconv.fits'), \
-                'iim': glob.glob(full_imDir + radec_str + '*i.unconv.fits'), \
-                'zim': glob.glob(full_imDir + radec_str + '*z.unconv.fits'), \
-                'yim': glob.glob(full_imDir + radec_str + '*y.unconv.fits')}
+    dic_list = {band+"im": glob.glob(full_imDir + radec_str + '*.unconv.fits'.format(band)) for band in bands}
 
     projcell, subcell = None, None
     
-    for (i, bandIm) in enumerate(['gim', 'rim', 'iim', 'zim', 'yim']):
+    bandIms = [band+"im" for band in bands]
+    for (i, bandIm) in enumerate(bandIms):
         print("{}-band".format(bands[i]))
         
         ### If filename does nor exists -> get file from url
@@ -1800,6 +1801,106 @@ def cutout_vista(ra, dec, bands=["Z","Y","J","H","K"], survey="VHS", database="V
         allBands = "".join(bands)
         plt.savefig(saveDir + "Cutouts_VISTA-{}_{}_{}_{:.0f}arcsec.png".format(survey, radec_str, allBands, width_as),\
                     bbox_inches="tight")
+        plt.close()
+    else:
+        print(" Return the figure")
+        return fig
+
+
+# -------------------------------------------------------------------------- #
+#                                 VST-ATLAS                                  #
+# -------------------------------------------------------------------------- #
+def cutout_vstAtlas(ra, dec, bands=["u","g","r","i","z"], database="ATLASDR3",\
+                 psfmags=None, imDir="/data/vst-atlas/", input_filename=[], saveFITS=False,\
+                 width_as=20., smooth=False, cmap="binary", minmax="MAD", origin="lower", figTitle=True, \
+                 return_val=False, saveDir=None):
+    
+    """
+        Plot all the bands cutouts on one plot for an input source position
+        
+        ## Cutouts parameters
+        width_as: size of the cutout box; default is 20arcsec
+        smooth: gaussian smoothing with sigma=1.0; defaul is False
+        cmap: image colour map
+        minmax: Defined the min-max scale of the image; default is from sigma_MAD(image) (SEE def cutout_scale)
+        origin: where to place the [0,0] index of the image; default is "lower"
+        figTitle: add a title to the final figure (ex: VISTA cutout 20"x20" ra=, dec= (Jradec); default is True)
+        
+        ## VISTA parameters
+        ra, dec: position of the source in deg (single object, not an array)
+        bands: filters for which to do the cutouts
+        psfmags: magnitudes of the source. Should be an array of the same size than bands or None (default)
+        Will be added to band cutout title if not None
+        imDir: directory of the fits file if already save on disk
+        input_filename: name of the input file if save on disk
+        database: ATLAS database used = ATLAS + DataRealease
+        saveFITS: save fits tile file on disk (to imDir)
+        
+        ## Output parameters
+        return_val: return image data, min-max(image); default is False
+        saveDir: output directory to save the final figure. If None do not save; default is None
+        """
+    
+    print("VST-ATLAS cutout(s), band(s):", "".join(bands))
+    
+    ### radec: HHMMSSsDDMMSS
+    radec_str = radecStr(ra, dec, precision=1)
+    
+    ### Figure: defined fig and gs
+    figWidth = len(bands) * 8./3.
+    fig = plt.figure(figsize=(figWidth, 4))
+    fig.subplots_adjust(left = 0.05, right = 0.95, top = 0.90, bottom = 0, wspace = 0)
+    gs = gridspec.GridSpec(1, len(bands))
+    
+    datas = []
+    
+    for i, band in enumerate(bands):
+        print("{}-band".format(band))
+        ### Filename of fits image if save of the disk
+        if len(input_filename) == 0:
+            input_filename = ""
+        else:
+            input_filename = input_filename[i]
+        filename = imDir + input_filename
+        
+        ### If filename does nor exists -> get file from url
+        if not os.path.exists(filename) or input_filename == "":
+            filename = cdl.vstAtlas_dl(ra, dec, band, database=database, width_as=width_as,\
+                                    FitsOutputPath=imDir, saveFITS=saveFITS)
+        
+        print("   ", filename)
+        
+        ### Read fits file: cutout size = width_as
+        ###                 filename could be a system path or an url or ""
+        print("   Try to read the fits file ...")
+        image = rd_fits(filename, ra, dec, hdrNum=1, width_as=width_as, pixelscale=0.21, smooth=smooth)
+        
+        ### Plot image: cutout size = width_as
+        print("   Plot the cutout ...")
+        ax = fig.add_subplot(gs[0,i])
+        
+        if psfmags is not None:
+            psfmags = psfmags[i]
+        
+        vmin, vmax = plt_image(band, image, fig, ax, psfmags=psfmags, cmap=cmap, minmax=minmax, origin=origin)
+        datas.append((image, vmin, vmax))
+
+    ## Add a title to the figure
+    if figTitle:
+        fig.suptitle('VST-ATLAS cutouts ({:.0f}"x{:.0f}") \n ra: {:.4f}, dec: {:.4f} (J{})'.format(width_as, width_as,\
+                                                                                            ra, dec, radec_str), fontsize=15)
+    
+    ### Output
+    if return_val:
+        print(" Return image data")
+        plt.close(fig)
+        return datas
+                                                                                                    
+    if saveDir is not None:
+        print(" Save the figure to", saveDir)
+        allBands = "".join(bands)
+        plt.savefig(saveDir + "Cutouts_VISTA-{}_{}_{}_{:.0f}arcsec.png".format(survey, radec_str, allBands, width_as),\
+                        bbox_inches="tight")
         plt.close()
     else:
         print(" Return the figure")

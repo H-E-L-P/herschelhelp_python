@@ -1,3 +1,8 @@
+"""
+    Author: Estelle Pons epons@ast.cam.ac.uk
+    Date: 2018
+"""
+
 # Python 2/3 compatibility
 from __future__ import print_function   # to use print() as a function in Python 2
 
@@ -5,10 +10,12 @@ import os, sys
 import urllib, re
 try:
     import urllib2, urllib
+    urlencode = urllib.urlencode
     import cookielib
 except:
     import urllib
     import urllib.request as urllib2
+    urlencode = urllib.parse.urlencode
     import http.cookiejar as cookielib
 import numpy as np
 from astropy import table
@@ -178,12 +185,7 @@ def cfht_dl(ra, dec, band, instrument="MegaPrime", optFiltersGen='both', getFull
     AND Observation.type = 'OBJECT' 
     AND  ( Plane.quality_flag IS NULL OR Plane.quality_flag != 'junk' ) )""".format(str(ra), str(dec), instrument, filterID)
     
-    if sys.version_info.major == 2:
-        urlQuery = "http://www.cadc-ccda.hia-iha.nrc-cnrc.gc.ca/AdvancedSearch/tap/sync?LANG=ADQL&REQUEST=doQuery&USEMAQ=true&" +\
-                    urllib.urlencode({"QUERY":query, "FORMAT":"csv"}) 
-    else:
-        urlQuery = "http://www.cadc-ccda.hia-iha.nrc-cnrc.gc.ca/AdvancedSearch/tap/sync?LANG=ADQL&REQUEST=doQuery&USEMAQ=true&" +\
-                    urllib.parse.urlencode({"QUERY":query, "FORMAT":"csv"})     
+    urlQuery = "http://www.cadc-ccda.hia-iha.nrc-cnrc.gc.ca/AdvancedSearch/tap/sync?LANG=ADQL&REQUEST=doQuery&USEMAQ=true&" + urlencode({"QUERY":query, "FORMAT":"csv"})
 
     t = ascii.read(urlQuery, header_start=0, delimiter=',')
     # Available to download
@@ -646,7 +648,7 @@ def hst_dl(ra, dec, band, instrument="ACS", width_as=20.,\
         return ""
         
     ## 2/ Cutout access
-    partialIm_lens, partialIm_fnames = [], []
+    partialIm_lens, partialIm_fnames, urlIms = [], [], []
     filename = ""
     
     for fname in fnames:
@@ -663,8 +665,10 @@ def hst_dl(ra, dec, band, instrument="ACS", width_as=20.,\
             if np.isfinite(np.nanmean(image)):
                 partialIm_lens.append(len(data[np.isfinite(data[0])]))
                 partialIm_fnames.append(fname)
+                urlIms.appen(urlIm)
                 
     if filename == "" and len(partialIm_fnames)>0:
+        urlIm = urlIms[np.argmax(partialIm_lens)]
         filename = partialIm_fnames[np.argmax(partialIm_lens)]
             
 
@@ -765,7 +769,6 @@ def ndwfs_dl(ra, dec, band, width_as=20., FitsOutputPath="/data/ndwfs/", saveFIT
              
     try:
         h = fits.open(urlIm)
-        h.close()
         filename = urlIm
     except:
         print("NO NDWFS {}-band COVERAGE FOR THIS POSITION".format(band))
@@ -862,7 +865,7 @@ def ps1_dl(ra, dec, band, radec_str, projcell=None, subcell=None, getFullIm=Fals
         else:
             filename = FitsOutputPath + "{}_{}-{}_{:.0f}arcsec.fits".format(radec_str, "PS1",\
                                                                         shortname[:-5], width_as)
-        os.system("wget -O {} '{}'".format(filename, url_im[0]))
+        os.system("wget -O {} '{}'".format(filename, url_im))
         url_im = filename
        
     return url_im, projcell, subcell
@@ -903,10 +906,8 @@ def sdss_dl(ra, dec, band, dr=12, objid=None, FitsOutputPath="/data/sdss/", save
     
     if sys.version_info.major == 2:
         urlQuery = "http://skyserver.sdss.org/dr{}/SkyserverWS/SearchTools/SqlSearch?{}".format(dr,\
-                                   urllib.urlencode({'cmd':sqlQuery,'format':'csv'}))
-    else:
-        urlQuery = "http://skyserver.sdss.org/dr{}/SkyserverWS/SearchTools/SqlSearch?{}".format(dr,\
-                                   urllib.parse.urlencode({'cmd':sqlQuery,'format':'csv'}))
+                                   urlencode({'cmd':sqlQuery,'format':'csv'}))
+
     t = ascii.read(urlQuery)
     
     if len(t) > 0:
@@ -1118,8 +1119,9 @@ def uhs_dl(ra, dec, band, wsaLogin=[], database="UHSDR1", width_as=20.,\
         
     if len(links) > 0:
         # 3/ Get cut-out
-        filename = str(links[0])
-        filename = filename.replace("getImage", "getFImage", 1)
+        urlIm = str(links[0])
+        urlIm = urlIm.replace("getImage", "getFImage", 1)
+        filename = urlIm
     else:
         print("NO UHS {}-BAND COVERAGE FOR THIS POSITION".format(band))
         return ""
@@ -1135,7 +1137,7 @@ def uhs_dl(ra, dec, band, wsaLogin=[], database="UHSDR1", width_as=20.,\
             os.mkdir(FitsOutputPath)
         filename = FitsOutputPath + "{}_UHS-{}_{}_{:.0f}arcsec.fits.gz".format(radec_str, fname[:-4], band,\
                                                                             width_as)
-        os.system("wget -O {} '{}'".format(filename, url_im[0]))
+        os.system("wget -O {} '{}'".format(filename, urlIm))
             
     return filename
 
@@ -1267,8 +1269,9 @@ def vista_dl(ra, dec, band, wsaLogin=[], survey="VHS", database="VHSDR5", width_
             
     if len(links) > 0:
         # 3/ Get cut-out
-        filename = links[0]
-        filename = filename.replace("getImage", "getFImage", 1)
+        urlIm = links[0]
+        urlIm = urlIm.replace("getImage", "getFImage", 1)
+        filename = urlIm
     else:
         print("NO VISTA-{} {}-BAND COVERAGE FOR THIS POSITION".format(survey, band))
         return ""
@@ -1284,10 +1287,88 @@ def vista_dl(ra, dec, band, wsaLogin=[], survey="VHS", database="VHSDR5", width_
             os.mkdir(FitsOutputPath)
         filename = FitsOutputPath + "{}_VISTA-{}_{}_{:.0f}arcsec.fits.gz".format(radec_str, survey, fname[:-4], band,\
                                                                               width_as)
-        os.system("wget -O {} '{}'".format(filename, url_im[0]))
+        os.system("wget -O {} '{}'".format(filename, urlIm))
                 
     return filename
 
 
 
-             
+# -------------------------------------------------------------------------- #
+#                                VST ATLAS                                   #
+# -------------------------------------------------------------------------- #
+def vstAtlas_dl(ra, dec, band, database="ATLASDR3", width_as=20.,\
+                FitsOutputPath="/data/vst-atlas/", saveFITS=False):
+
+    """
+    Download VST ATLAS fits image
+    
+    1/ GetImage cut-out results
+      POST Request Method:
+      Request URL: http://osa.roe.ac.uk/getImageHandler
+      params: archive=OSA&database=ATLASDR3&programmeID=170&ra=150&dec=-15&sys=J&filterID=all&xsize=1&ysize=1&obsType=object&frameType=stack&mfid=&fsid=
+      action: getImage
+    
+    2/ Show GetImage cut-out
+    http://surveys.roe.ac.uk/wsa/cgi-bin/getImage.cgi?file=/disk49/osa/ingest/fits/20130407_v1.1/o20130407_00058_st.fit&mfid=262952&extNo=1&lx=1&hx=169&ly=759&hy=1041&rf=0&flip=1&uniq=1018_578_7_37_2&xpos=27.3&ypos=141.9&band=u&ra=150&dec=-15
+    
+    3/ Get cut-out
+    http://surveys.roe.ac.uk/wsa/cgi-bin/getFImage.cgi?file=%2Fdisk49%2Fosa%2Fingest%2Ffits%2F20130407_v1.1%2Fo20130407_00058_st.fit;mfid=262952;extNo=1;lx=1;hx=75;ly=853;hy=947;rf=0;flip=1;uniq=1722_660_32_57_2;xpos=27.3;ypos=47.9;band=u;ra=150;dec=-15
+    
+    filename ex: o20130407_00058_st.fit
+    
+    ------------------------------------------------------------------------------------------------------------------------
+    
+    database: ATLAS database used = ATLAS + DataRealease
+    FitsOutputPath: path to save the output fits file (if saveFITS=True)
+    saveFITS: save fits file on disk (to FitsOutputPath/radec_str[0:4]/)
+    """
+    
+    import requests
+        
+    print("   Get the url of the fits file ...")
+    
+    ## VST ATLAS filters ID
+    filterIDs = {"u":1, "g":2, "r":3, "i":4, "z":5}
+    filterID = filterIDs[band]
+
+    ## 1/ GetImage cut-out results
+    width_am = width_as / 60.
+    Request_URL = "http://osa.roe.ac.uk/getImageHandler"
+    params = {"archive":'OSA',"database": '%s'%database,"programmeID":'170',"ra":'%f'%ra,"dec":'%f'%dec,\
+              "sys":'J',"filterID":'%d'%filterID,"xsize":'%.3f'%width_am,"ysize":'%.3f'%width_am,\
+              "obsType":'object',"frameType":'stack',"mfid":'',"fsid":''}
+    data = {"action":'getImage',"params":urlencode(params)}
+                  
+    r = requests.post(Request_URL, data=data)
+
+    ## 2/ Show GetImage cut-out
+    #links = re.findall('href="(http://.*?)"', r.text.decode('utf-8'))
+    links = re.findall('href="(http://.*?)"', r.text)
+
+    if len(links) > 0:
+        ## 3/ Get cut-out
+        # Remove conf file
+        for i in range(len(links)):
+            split_url = str(links[i]).split("&")[0].split("/")
+            fname = split_url[-1]
+            if "st.fit" in fname:
+                urlIm = str(links[i])
+                urlIm = urlIm.replace("getImage", "getFImage", 1)
+                filename = urlIm
+                break
+    else:
+        print("NO VST-ATLAS {}-BAND COVERAGE FOR THIS POSITION".format(band))
+        return ""
+
+    ## Save the fits file
+    if saveFITS:
+        radec_str = radecStr(ra, dec, precision=1)
+        FitsOutputPath = FitsOutputPath + radec_str[0:4] + "/"
+        if not os.path.exists(FitsOutputPath):
+            os.mkdir(FitsOutputPath)
+                  
+        filename = FitsOutputPath + "{}_VST-ATLAS_{}_{}_{:.0f}arcsec.fits.gz".format(radec_str, fname[:-4], band, width_as)
+        os.system("wget -O {} '{}'".format(filename, urlIm))
+
+    return filename
+
