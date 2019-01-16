@@ -2,6 +2,8 @@
 import logging
 import os
 
+from astropy import units as u
+
 import numpy as np
 
 from .filters import get_filter_meta_table
@@ -98,6 +100,7 @@ def convert_table_for_cigale(catalogue, inplace=False,
         LOGGER.debug("Converting %s flux to mJy.", band)
         catalogue['f_{}'.format(band)].name = band
         catalogue[band] /= 1000.  # μJy to mJy
+        catalogue[band].unit = u.uJy
         if band_flag is not None:
             catalogue[band][band_flag] = np.nan
         columns.append(band)
@@ -107,6 +110,7 @@ def convert_table_for_cigale(catalogue, inplace=False,
         if 'ferr_{}'.format(band) in catalogue.colnames:
             catalogue['ferr_{}'.format(band)].name = '{}_err'.format(band)
             catalogue['{}_err'.format(band)] /= 1000.  # μJy to mJy
+            catalogue['{}_err'.format(band)].unit = u.uJy
             if band_flag is not None:
                 catalogue['{}_err'.format(band)][band_flag] = np.nan
             columns.append('{}_err'.format(band))
