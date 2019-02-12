@@ -19,7 +19,7 @@ from astropy.wcs import WCS
 import astropy.io.fits as fits
 from astropy.table import Table
 
-import cutouts_dl as cdl
+from . import cutouts_dl as cdl
 
 
 ##############################################################################
@@ -324,6 +324,8 @@ def cutout_cfht(ra, dec, bands=["u", "g", "r", "i", "z"], instrument="MegaPrime"
             input_filename = ""
         else:
             input_filename = input_filename[i]
+        print(imDir)
+        print(input_filename)
         filename = imDir + input_filename
         
         ### If filename does nor exists -> get file from url
