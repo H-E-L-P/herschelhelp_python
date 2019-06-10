@@ -864,7 +864,7 @@ def cutout_hsc(ra, dec, bands=["g","r","i","z","y","N816","N921"], login=[],\
 
         ## Add a title to the figure
         if figTitle:
-            fig.suptitle('HDFN cutouts ({:.0f}"x{:.0f}") \n ra: {:.4f}, dec: {:.4f} (J{})'.format(width_as, width_as,\
+            fig.suptitle('HSC cutouts ({:.0f}"x{:.0f}") \n ra: {:.4f}, dec: {:.4f} (J{})'.format(width_as, width_as,\
                                                                                                 ra, dec, radec_str), fontsize=15)
             
         ### Output
