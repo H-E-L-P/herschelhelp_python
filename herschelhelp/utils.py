@@ -110,7 +110,7 @@ def help_cut_out(original, ra, dec, target=None, size_angle=100*u.arcsec):
         
     size_pix = (
         2*(Angle(size_angle).degree/
-        Angle(original_fits[1].header['CD2_2']*u.deg ).degree )*  u.pixel
+        Angle(pix_size_deg*u.deg ).degree )*  u.pixel
         )
     image_cutout = Cutout2D(
         image_hdu.data, 
