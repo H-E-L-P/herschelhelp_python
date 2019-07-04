@@ -52,9 +52,15 @@ def clean_table(table):
             table[col] = table[col].astype(str)
  
         #Get rid of unit '-' from some tables
-        if final_cat[col].unit == '-':
+        if table[col].unit == '-':
             print("Converting column {} unit from '-' to None".format(col) )
-            final_cat[col].unit = None        
+            table[col].unit = None   
+            
+        #replace masked floats with nans     
+        if table[col].dtype == float:
+            table[col].fill_value = np.nan
+    
+    table = table.filled()
             
     return table
     
@@ -95,6 +101,13 @@ def help_cut_out(original, ra, dec, target=None, size_angle=100*u.arcsec):
    # Make the cutout, including the WCS
     ra_dec_position = SkyCoord(ra, dec, frame='icrs')
     x_y_position = skycoord_to_pixel(ra_dec_position, image_wcs)
+    
+    #Some of images use CD2_2 key, some use CDELT2
+    try:
+        pix_size_deg = original_fits[1].header['CD2_2']
+    except KeyError:
+        pix_size_deg = original_fits[1].header['CDELT2']
+        
     size_pix = (
         2*(Angle(size_angle).degree/
         Angle(original_fits[1].header['CD2_2']*u.deg ).degree )*  u.pixel
