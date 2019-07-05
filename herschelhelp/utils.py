@@ -42,9 +42,12 @@ def clean_table(table):
     table = table.copy()
     for col in table.colnames:
         #Remove empty columns
-        if np.all(table[col].mask):
-            print("Removing empty column: {}".format(col))
-            table.remove_column(col)
+        try:
+            if np.all(table[col].mask):
+                print("Removing empty column: {}".format(col))
+                table.remove_column(col)
+        except AttributeError:
+            print("{} is not a masked columns".format(col))
             
         #Get rid of column type object from VO queries
         if table[col].dtype == 'object':
