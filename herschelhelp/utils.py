@@ -20,6 +20,9 @@ from astropy.coordinates import SkyCoord, Angle
 import astropy.units as u
 
 from herschelhelp_internal.utils import inMoc
+
+
+
     
 def clean_table(table):
     """Take a table produced by a VO query and remove all empty columns
@@ -40,12 +43,15 @@ def clean_table(table):
     
     """
     table = table.copy()
+    if len(table) == 0:
+        return table
     for col in table.colnames:
         #Remove empty columns
         try:
             if np.all(table[col].mask):
                 print("Removing empty column: {}".format(col))
                 table.remove_column(col)
+                continue
         except AttributeError:
             print("{} is not a masked columns".format(col))
             
@@ -68,6 +74,45 @@ def clean_table(table):
     return table
     
     
+def query_vox(query, clean_table=False):
+    """Send a query to VOX using asyncronous TAP and return table
+    
+    Wait five seconds and try again until the job finishes
+    
+    Inputs
+    =======
+    query,   str
+        The query to execute
+        
+    Returns
+    =======
+    table,   Astropy.table.Table
+    """
+    service = vo.dal.TAPService(
+    "https://herschel-vos.phys.sussex.ac.uk/__system__/tap/run/tap"
+    )
+    
+    job = service.submit_job(query)
+    job.run()
+    job_url = job.url
+    job_result = vo.dal.tap.AsyncTAPJob(job_url)
+    start_time = time.time()
+    wait = 5.
+    print(job.phase)
+    while (job.phase == 'EXECUTING') or (job.phase == 'QUEUED'):
+    
+        time.sleep(wait) #wait and try again
+
+
+    print('Job {} after {} seconds.'.format(job.phase, round(time.time() - start_time)))
+
+    result = job_result.fetch_result()
+    table = result.table
+    
+    if clean_table:
+        table = clean_table(table)
+        
+    return table
     
 def help_cut_out(original, ra, dec, target=None, size_angle=100*u.arcsec):
     """Take an input image and cutout a square around the centre and 

@@ -11,13 +11,16 @@ import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 import glob
 import os
+
 from astropy.nddata import Cutout2D
-from astropy.coordinates import SkyCoord
+from astropy.coordinates import SkyCoord, Angle
 import astropy.units as u
-import scipy.ndimage as ndimage
 from astropy.wcs import WCS
 import astropy.io.fits as fits
 from astropy.table import Table
+
+import scipy.ndimage as ndimage
+
 
 from . import cutouts_dl as cdl
 
@@ -79,7 +82,7 @@ def urlfile_exists(location):
              return False
 
    
-def rd_fits(filename, ra, dec, hdrNum=1, width_as=20., pixelscale=None, hdrKey_pixelscale=None, smooth=False):
+def rd_fits(filename, ra, dec, hdrNum=1, width_as=20., pixelscale=None, hdrKey_pixelscale=None, hdr_pix_scale_unit = u.arcsec, smooth=False):
     """
     Read fits image and create cutout of size width_as
     """
@@ -121,7 +124,11 @@ def rd_fits(filename, ra, dec, hdrNum=1, width_as=20., pixelscale=None, hdrKey_p
 
 
         if pixelscale is None:
+            
             pixelscale = hdr[hdrKey_pixelscale]
+            if hdr_pix_scale_unit != u.arcsec:
+                pixelscale = Angle(pixelscale*hdr_pix_scale_unit ).arcsec
+            print('Reading pixel scale as {} arcsec'.format(pixelscale))
         #print(pixelscale
         width_pix = width_as / pixelscale
 
