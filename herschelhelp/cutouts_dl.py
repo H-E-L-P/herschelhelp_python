@@ -832,9 +832,9 @@ def ps1_dl(ra, dec, band, radec_str, projcell=None, subcell=None, getFullIm=Fals
     if projcell == None:
         url_filenames = "http://ps1images.stsci.edu/cgi-bin/ps1filenames.py?ra=" + str(ra) + "&dec=" + str(dec)
         datas = urllib2.urlopen(url_filenames).readlines()
-        print(datas)
+
         if len(datas) > 1:
-            spilt_datas = datas[1].split(" ")
+            spilt_datas = datas[1].decode("utf-8").split()
             projcell, subcell = spilt_datas[0], spilt_datas[1]
             projcell, subcell = projcell.rjust(4, "0"), subcell.rjust(3, "0")
         else:
