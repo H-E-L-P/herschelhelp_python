@@ -182,7 +182,7 @@ def plot_figure(image,cat,wcs,ra_cent,dec_cent,plot_params,contour_data=None,ret
             cat_plot(cat[raname],cat[decname],wcsimg,ax,marker[0],col,size)
         else:
             #the redshift column may need to be changed if your redhsift column isn't called 'redshift'
-            colbar = cat_plot(cat[raname],cat[decname],wcsimg,ax,marker[0],col,size,colz=True,redshift=catalogue['redshift'])
+            colbar = cat_plot(cat[raname],cat[decname],wcsimg,ax,marker[0],col,size,colz=True,redshift=cat['redshift'])
             fig.colorbar(colbar)
     else:
         for n,catalogue in enumerate(cat):
