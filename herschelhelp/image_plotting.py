@@ -122,9 +122,9 @@ def contour_plot(data,ra,dec,box_length,ax):
     wcscut = imgcut.wcs.celestial
     imgcut = imgcut.data
     vmin, vmax = ctts.cutout_scale(imgcut)
-    print('contours are at {}'.format(np.linspace(vmin,vmax,5)))
+    print('contours are at {}'.format(np.linspace(vmin,vmax,7)))
     
-    ax.contour(imgcut,levels=np.linspace(vmin,vmax,5),colors='white',transform=ax.get_transform(wcscut))
+    ax.contour(imgcut,levels=np.linspace(vmin,vmax,7),colors='white',transform=ax.get_transform(wcscut))
     
     return(ax)
 
