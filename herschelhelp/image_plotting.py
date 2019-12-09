@@ -174,10 +174,10 @@ def plot_figure(image,cat,wcs,ra_cent,dec_cent,plot_params,contour_data=None,ret
     decmin = dec_cent - box_length/2
     #print('ramax = {}\nramin = {}\ndecmax = {}\ndecmin = {}'.format(ramax,ramin,decmax,decmin))
     if type(cat) != list:
-        raname,decname = find_ra_and_dec(catalogue.colnames)
+        raname,decname = find_ra_and_dec(cat.colnames)
         mask = (cat[raname]>ramin) & (cat[raname]<ramax)  &  (cat[decname]>decmin) & (cat[decname]<decmax)
         cat = cat[mask]
-        print('plotting {} sources'.format(len(catalogue)))
+        print('plotting {} sources'.format(len(cat)))
         if plot_params['use_redshift']==False:
             cat_plot(cat[raname],cat[decname],wcsimg,ax,marker[0],col,size)
         else:
