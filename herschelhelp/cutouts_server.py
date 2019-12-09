@@ -132,8 +132,9 @@ def rd_fits(filename, ra, dec, hdrNum=1, width_as=20., pixelscale=None, hdrKey_p
         #print(pixelscale
         width_pix = width_as / pixelscale
 
-        cutout = Cutout2D(data, pix_coord, (width_pix, width_pix))
+        cutout = Cutout2D(data, pix_coord, (width_pix, width_pix),wcs=w)
         image = cutout.data
+        w = cutout.wcs
 
         #Smooth the data
         if smooth:
@@ -144,7 +145,7 @@ def rd_fits(filename, ra, dec, hdrNum=1, width_as=20., pixelscale=None, hdrKey_p
         null_image = np.zeros(shape=(10,10), dtype="int8")
         image = null_image
 
-    return image
+    return image,w
     
     
 def plt_image(band, image, fig, ax, psfmags=None, cmap="binary", minmax="MAD", origin="lower"):
@@ -241,7 +242,7 @@ def cutout_twomass(ra, dec, bands=['J','H','K'], psfmags=None,\
         ### Read fits file: cutout size = width_as
         ###                 filename could be a system path or an url or ""
         print("   Try to read the fits file ...")
-        image = rd_fits(filename, ra, dec, hdrNum=0, width_as=width_as, pixelscale=1., smooth=smooth)
+        image,wcs = rd_fits(filename, ra, dec, hdrNum=0, width_as=width_as, pixelscale=1., smooth=smooth)
         
         ### Plot image: cutout size = width_as
         print("   Plot the cutout ...")
@@ -251,7 +252,7 @@ def cutout_twomass(ra, dec, bands=['J','H','K'], psfmags=None,\
             psfmags = psfmags[i]
             
         vmin, vmax = plt_image(band, image, fig, ax, psfmags=psfmags, cmap=cmap, minmax=minmax, origin=origin)
-        datas.append((image, vmin, vmax))
+        datas.append((image, vmin, vmax, wcs))
         
     ## Add a title to the figure
     if figTitle:
@@ -345,7 +346,7 @@ def cutout_cfht(ra, dec, bands=["u", "g", "r", "i", "z"], instrument="MegaPrime"
         ### Read fits file: cutout size = width_as
         ###                 filename could be a system path or an url or ""
         print("   Try to read the fits file ...")
-        image = rd_fits(filename, ra, dec, hdrNum=None, width_as=width_as, hdrKey_pixelscale="PIXSCAL1", smooth=smooth)
+        image,wcs = rd_fits(filename, ra, dec, hdrNum=None, width_as=width_as, hdrKey_pixelscale="PIXSCAL1", smooth=smooth)
         
         ### Plot image: cutout size = width_as
         print("   Plot the cutout ...")
@@ -355,7 +356,7 @@ def cutout_cfht(ra, dec, bands=["u", "g", "r", "i", "z"], instrument="MegaPrime"
             psfmags = psfmags[i]
             
         vmin, vmax = plt_image(band, image, fig, ax, psfmags=psfmags, cmap=cmap, minmax=minmax, origin=origin)
-        datas.append((image, vmin, vmax))
+        datas.append((image, vmin, vmax, wcs))
         
     ## Add a title to the figure
     if figTitle:
@@ -447,7 +448,7 @@ def cutout_decals(ra, dec, bands=['g','r','z'], dr=5, psfmags=None, getFullIm=Fa
         else:
             hdrNum = 0
         
-        image = rd_fits(filename, ra, dec, hdrNum=hdrNum, width_as=width_as, pixelscale=0.262, smooth=smooth)
+        image,wcs = rd_fits(filename, ra, dec, hdrNum=hdrNum, width_as=width_as, pixelscale=0.262, smooth=smooth)
         
         ### Plot image: cutout size = width_as
         print("   Plot the cutout ...")
@@ -457,7 +458,7 @@ def cutout_decals(ra, dec, bands=['g','r','z'], dr=5, psfmags=None, getFullIm=Fa
             psfmags = psfmags[i]
             
         vmin, vmax = plt_image(band, image, fig, ax, psfmags=psfmags, cmap=cmap, minmax=minmax, origin=origin)
-        datas.append((image, vmin, vmax))
+        datas.append((image, vmin, vmax, wcs))
         
     ## Add a title to the figure
     if figTitle:
@@ -546,7 +547,7 @@ def cutout_des(ra, dec, bands=['g','r','i','z','y'], dr=1, psfmags=None,\
         ### Read fits file: cutout size = width_as
         ###                 filename could be a system path or an url or ""
         print("   Try to read the fits file ...")
-        image = rd_fits(filename, ra, dec, hdrNum=0, width_as=width_as, pixelscale=pixelscale, smooth=smooth)
+        image,wcs = rd_fits(filename, ra, dec, hdrNum=0, width_as=width_as, pixelscale=pixelscale, smooth=smooth)
         
         ### Plot image: cutout size = width_as
         print("   Plot the cutout ...")
@@ -556,7 +557,7 @@ def cutout_des(ra, dec, bands=['g','r','i','z','y'], dr=1, psfmags=None,\
             psfmags = psfmags[i]
 
         vmin, vmax = plt_image(band, image, fig, ax, psfmags=psfmags, cmap=cmap, minmax=minmax, origin=origin)
-        datas.append((image, vmin, vmax))
+        datas.append((image, vmin, vmax, wcs))
 
     ## Add a title to the figure
     if figTitle:
@@ -643,7 +644,7 @@ def cutout_flsKPNO(ra, dec, bands=['R'], psfmags=None, imDir="/data/fls-kpno/", 
         ### Read fits file: cutout size = width_as
         ###                 filename could be a system path or an url or ""
         print("   Try to read the fits file ...")
-        image = rd_fits(filename, ra, dec, hdrNum=0, width_as=width_as, hdrKey_pixelscale="PIXSCAL1", smooth=smooth)
+        image,wcs = rd_fits(filename, ra, dec, hdrNum=0, width_as=width_as, hdrKey_pixelscale="PIXSCAL1", smooth=smooth)
         
         ### Plot image: cutout size = width_as
         print("   Plot the cutout ...")
@@ -653,7 +654,7 @@ def cutout_flsKPNO(ra, dec, bands=['R'], psfmags=None, imDir="/data/fls-kpno/", 
             psfmags = psfmags[i]
 
         vmin, vmax = plt_image(band, image, fig, ax, psfmags=psfmags, cmap=cmap, minmax=minmax, origin=origin)
-        datas.append((image, vmin, vmax))
+        datas.append((image, vmin, vmax, wcs))
 
     ## Add a title to the figure
     if figTitle:
@@ -750,7 +751,7 @@ def cutout_hdfn(ra, dec, bands=["U","B","V","R","I","z","HK"], psfmags=None,
         ### Read fits file: cutout size = width_as
         ###                 filename could be a system path or an url or ""
         print("   Try to read the fits file ...")
-        image = rd_fits(filename, ra, dec, hdrNum=0, width_as=width_as, pixelscale=0.3, smooth=smooth)
+        image,wcs = rd_fits(filename, ra, dec, hdrNum=0, width_as=width_as, pixelscale=0.3, smooth=smooth)
         
         ### Plot image: cutout size = width_as
         print("   Plot the cutout ...")
@@ -760,7 +761,7 @@ def cutout_hdfn(ra, dec, bands=["U","B","V","R","I","z","HK"], psfmags=None,
             psfmags = psfmags[i]
 
         vmin, vmax = plt_image(band, image, fig, ax, psfmags=psfmags, cmap=cmap, minmax=minmax, origin=origin)
-        datas.append((image, vmin, vmax))
+        datas.append((image, vmin, vmax, wcs))
 
     ## Add a title to the figure
     if figTitle:
@@ -857,7 +858,7 @@ def cutout_hsc(ra, dec, bands=["g","r","i","z","y","N816","N921"], login=[],\
             ###                 filename could be a system path or an url or ""
             print("   Try to read the fits file ...")
             
-            image = rd_fits(filename, ra, dec, hdrNum=1, width_as=width_as, pixelscale=0.17, smooth=smooth)
+            image,wcs = rd_fits(filename, ra, dec, hdrNum=1, width_as=width_as, pixelscale=0.17, smooth=smooth)
             
             ### Plot image: cutout size = width_as
             print("   Plot the cutout ...")
@@ -867,7 +868,7 @@ def cutout_hsc(ra, dec, bands=["g","r","i","z","y","N816","N921"], login=[],\
                 psfmags = psfmags[i]
 
             vmin, vmax = plt_image(band, image, fig, ax, psfmags=psfmags, cmap=cmap, minmax=minmax, origin=origin)
-            datas.append((image, vmin, vmax))
+            datas.append((image, vmin, vmax, wcs))
 
         ## Add a title to the figure
         if figTitle:
@@ -963,7 +964,7 @@ def cutout_hst(ra, dec, bands=["F435W","F606W","F775W","F814W","F850LP"], instru
         pixelscales = {"ACS": 0.05, "WFC3": 0.09}
         pixelscale = pixelscales[instrument]
 
-        image = rd_fits(filename, ra, dec, hdrNum=0, width_as=width_as, pixelscale=pixelscale, smooth=smooth)
+        image,wcs = rd_fits(filename, ra, dec, hdrNum=0, width_as=width_as, pixelscale=pixelscale, smooth=smooth)
         
         ### Plot image: cutout size = width_as
         print("   Plot the cutout ...")
@@ -973,7 +974,7 @@ def cutout_hst(ra, dec, bands=["F435W","F606W","F775W","F814W","F850LP"], instru
             psfmags = psfmags[i]
 
         vmin, vmax = plt_image(band, image, fig, ax, psfmags=psfmags, cmap=cmap, minmax=minmax, origin=origin)
-        datas.append((image, vmin, vmax))
+        datas.append((image, vmin, vmax, wcs))
 
     ## Add a title to the figure
     if figTitle:
@@ -1063,7 +1064,7 @@ def cutout_legacySurvey(ra, dec, bands=['g','r','z'], dr=6, psfmags=None,\
         ### Read fits file: cutout size = width_as
         ###                 filename could be a system path or an url or ""
         print("   Try to read the fits file ...")
-        image = rd_fits(filename, ra, dec, hdrNum=0, width_as=width_as, pixelscale=0.262, smooth=smooth)
+        image,wcs = rd_fits(filename, ra, dec, hdrNum=0, width_as=width_as, pixelscale=0.262, smooth=smooth)
         
         ### Plot image: cutout size = width_as
         print("   Plot the cutout ...")
@@ -1073,7 +1074,7 @@ def cutout_legacySurvey(ra, dec, bands=['g','r','z'], dr=6, psfmags=None,\
             psfmags = psfmags[i]
             
         vmin, vmax = plt_image(band, image, fig, ax, psfmags=psfmags, cmap=cmap, minmax=minmax, origin=origin)
-        datas.append((image, vmin, vmax))
+        datas.append((image, vmin, vmax, wcs))
         
     ## Add a title to the figure
     if figTitle:
@@ -1162,7 +1163,7 @@ def cutout_ndwfs(ra, dec, bands=['Bw','R','I','K'], psfmags=None,\
         ### Read fits file: cutout size = width_as
         ###                 filename could be a system path or an url or ""
         print("   Try to read the fits file ...")
-        image = rd_fits(filename, ra, dec, hdrNum=0, width_as=width_as, pixelscale=None, hdrKey_pixelscale="PIXSCAL1", smooth=smooth)
+        image,wcs = rd_fits(filename, ra, dec, hdrNum=0, width_as=width_as, pixelscale=None, hdrKey_pixelscale="PIXSCAL1", smooth=smooth)
         
         ### Plot image: cutout size = width_as
         print("   Plot the cutout ...")
@@ -1172,7 +1173,7 @@ def cutout_ndwfs(ra, dec, bands=['Bw','R','I','K'], psfmags=None,\
             psfmags = psfmags[i]
             
         vmin, vmax = plt_image(band, image, fig, ax, psfmags=psfmags, cmap=cmap, minmax=minmax, origin=origin)
-        datas.append((image, vmin, vmax))
+        datas.append((image, vmin, vmax, wcs))
         
     ## Add a title to the figure
     if figTitle:
@@ -1243,7 +1244,7 @@ def cutout_ps1(ra, dec, bands=["g","r","i","z","y"], psfmags=None,
     datas = []
     
     ### Filename of fits image if save of the disk (20" cutouts)
-    dic_list = {band+"im": glob.glob(full_imDir + radec_str + '*.unconv.fits'.format(band)) for band in bands}
+    dic_list = {band+"im": glob.glob(imDir + radec_str + '*.unconv.fits'.format(band)) for band in bands}
 
     projcell, subcell = None, None
     
@@ -1264,7 +1265,7 @@ def cutout_ps1(ra, dec, bands=["g","r","i","z","y"], psfmags=None,
         ### Read fits file: cutout size = width_as
         ###                 filename could be a system path or an url or ""
         print("   Try to read the fits file ...")
-        image = rd_fits(filename, ra, dec, hdrNum=0, width_as=width_as, pixelscale=0.258, smooth=smooth)
+        image,wcs = rd_fits(filename, ra, dec, hdrNum=0, width_as=width_as, pixelscale=0.258, smooth=smooth)
         
         ### Plot image: cutout size = width_as
         print("   Plot the cutout ...")
@@ -1274,7 +1275,7 @@ def cutout_ps1(ra, dec, bands=["g","r","i","z","y"], psfmags=None,
             psfmags = psfmags[i]
             
         vmin, vmax = plt_image(bands[i], image, fig, ax, psfmags=psfmags, cmap=cmap, minmax=minmax, origin=origin)
-        datas.append((image, vmin, vmax))
+        datas.append((image, vmin, vmax, wcs))
         
     ## Add a title to the figure
     if figTitle:
@@ -1365,7 +1366,7 @@ def cutout_sdss(ra, dec, bands=['u','g','r','i','z'], dr=12, objid=None, psfmags
         ### Read fits file: cutout size = width_as
         ###                 filename could be a system path or an url or ""
         print("   Try to read the fits file ...")
-        image = rd_fits(filename, ra, dec, hdrNum=0, width_as=width_as, pixelscale=0.396, smooth=smooth)
+        image,wcs = rd_fits(filename, ra, dec, hdrNum=0, width_as=width_as, pixelscale=0.396, smooth=smooth)
         
         ### Plot image: cutout size = width_as
         print("   Plot the cutout ...")
@@ -1375,7 +1376,7 @@ def cutout_sdss(ra, dec, bands=['u','g','r','i','z'], dr=12, objid=None, psfmags
             psfmags = psfmags[i]
 
         vmin, vmax = plt_image(band, image, fig, ax, psfmags=psfmags, cmap=cmap, minmax=minmax, origin=origin)
-        datas.append((image, vmin, vmax))
+        datas.append((image, vmin, vmax, wcs))
 
     ## Add a title to the figure
     if figTitle:
@@ -1471,7 +1472,7 @@ def cutout_spitzer(ra, dec, bands=['I1','I2','I3','I4'], dataset="SEIP", psfmags
                        "SWIRE":0.6, "GOODS":0.6, "FLS":1.22}
         hdrKey_pixelscales = {"SEIP": "PIXSCALE", "SDWFS": None, "SERVS": None, "SHELA": None, "SSDF": "PXSCAL2",\
                               "SpIES": "PXSCAL2", "SpUDS": "PXSCAL2", "SWIRE": None, "GOODS": None, "FLS": None}
-        image = rd_fits(filename, ra, dec, hdrNum=0, width_as=width_as, smooth=smooth,\
+        image,wcs = rd_fits(filename, ra, dec, hdrNum=0, width_as=width_as, smooth=smooth,\
                         pixelscale=pixelscales[dataset], hdrKey_pixelscale=hdrKey_pixelscales[dataset])
         
         ### Plot image: cutout size = width_as
@@ -1482,7 +1483,7 @@ def cutout_spitzer(ra, dec, bands=['I1','I2','I3','I4'], dataset="SEIP", psfmags
             psfmags = psfmags[i]
 
         vmin, vmax = plt_image(band, image, fig, ax, psfmags=psfmags, cmap=cmap, minmax=minmax, origin=origin)
-        datas.append((image, vmin, vmax))
+        datas.append((image, vmin, vmax, wcs))
 
     ## Add a title to the figure
     if figTitle:
@@ -1573,7 +1574,7 @@ def cutout_uhs(ra, dec, bands=['J'], database="UHSDR1", wsaLogin=[],\
         ### Read fits file: cutout size = width_as
         ###                 filename could be a system path or an url or ""
         print("   Try to read the fits file ...")
-        image = rd_fits(filename, ra, dec, hdrNum=1, width_as=width_as, hdrKey_pixelscale="PIXLSIZE", smooth=smooth)
+        image,wcs = rd_fits(filename, ra, dec, hdrNum=1, width_as=width_as, hdrKey_pixelscale="PIXLSIZE", smooth=smooth)
         
         ### Plot image: cutout size = width_as
         print("   Plot the cutout ...")
@@ -1583,7 +1584,7 @@ def cutout_uhs(ra, dec, bands=['J'], database="UHSDR1", wsaLogin=[],\
             psfmags = psfmags[i]
 
         vmin, vmax = plt_image(band, image, fig, ax, psfmags=psfmags, cmap=cmap, minmax=minmax, origin=origin)
-        datas.append((image, vmin, vmax))
+        datas.append((image, vmin, vmax, wcs))
 
     ## Add a title to the figure
     if figTitle:
@@ -1676,7 +1677,7 @@ def cutout_ukidss(ra, dec, bands=['Z','Y','J','H','K'], programme="LAS", databas
         ###                 filename could be a system path or an url or ""
         ### pixelscale = 0.4
         print("   Try to read the fits file ...")
-        image = rd_fits(filename, ra, dec, hdrNum=1, width_as=width_as, hdrKey_pixelscale="PIXLSIZE", smooth=smooth)
+        image,wcs = rd_fits(filename, ra, dec, hdrNum=1, width_as=width_as, hdrKey_pixelscale="PIXLSIZE", smooth=smooth)
         
         ### Plot image: cutout size = width_as
         print("   Plot the cutout ...")
@@ -1686,7 +1687,7 @@ def cutout_ukidss(ra, dec, bands=['Z','Y','J','H','K'], programme="LAS", databas
             psfmags = psfmags[i]
 
         vmin, vmax = plt_image(band, image, fig, ax, psfmags=psfmags, cmap=cmap, minmax=minmax, origin=origin)
-        datas.append((image, vmin, vmax))
+        datas.append((image, vmin, vmax, wcs))
 
     ## Add a title to the figure
     if figTitle:
@@ -1782,7 +1783,7 @@ def cutout_vista(ra, dec, bands=["Z","Y","J","H","K"], survey="VHS", database="V
         ### Read fits file: cutout size = width_as
         ###                 filename could be a system path or an url or ""
         print("   Try to read the fits file ...")
-        image = rd_fits(filename, ra, dec, hdrNum=1, width_as=width_as, pixelscale=0.34, smooth=smooth)
+        image,wcs = rd_fits(filename, ra, dec, hdrNum=1, width_as=width_as, pixelscale=0.34, smooth=smooth)
         
         ### Plot image: cutout size = width_as
         print("   Plot the cutout ...")
@@ -1792,7 +1793,7 @@ def cutout_vista(ra, dec, bands=["Z","Y","J","H","K"], survey="VHS", database="V
             psfmags = psfmags[i]
 
         vmin, vmax = plt_image(band, image, fig, ax, psfmags=psfmags, cmap=cmap, minmax=minmax, origin=origin)
-        datas.append((image, vmin, vmax))
+        datas.append((image, vmin, vmax, wcs))
 
     ## Add a title to the figure
     if figTitle:
@@ -1882,7 +1883,7 @@ def cutout_vstAtlas(ra, dec, bands=["u","g","r","i","z"], database="ATLASDR3",\
         ### Read fits file: cutout size = width_as
         ###                 filename could be a system path or an url or ""
         print("   Try to read the fits file ...")
-        image = rd_fits(filename, ra, dec, hdrNum=1, width_as=width_as, pixelscale=0.21, smooth=smooth)
+        image,wcs = rd_fits(filename, ra, dec, hdrNum=1, width_as=width_as, pixelscale=0.21, smooth=smooth)
         
         ### Plot image: cutout size = width_as
         print("   Plot the cutout ...")
@@ -1892,7 +1893,7 @@ def cutout_vstAtlas(ra, dec, bands=["u","g","r","i","z"], database="ATLASDR3",\
             psfmags = psfmags[i]
         
         vmin, vmax = plt_image(band, image, fig, ax, psfmags=psfmags, cmap=cmap, minmax=minmax, origin=origin)
-        datas.append((image, vmin, vmax))
+        datas.append((image, vmin, vmax, wcs))
 
     ## Add a title to the figure
     if figTitle:
