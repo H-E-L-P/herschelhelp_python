@@ -128,7 +128,7 @@ def contour_plot(data,ra,dec,box_length,ax):
     
     return(ax)
 
-def plot_figure(image,cat,wcs,ra_cent,dec_cent,plot_params,contour_data=None):
+def plot_figure(image,cat,wcs,ra_cent,dec_cent,plot_params,contour_data=None,return_fig=False):
     '''
     creates a figure containing a cutout of a image with points, from multiple catalogues, 
     overplotted on it which can be coloured according to their redshift. In addition a contour 
@@ -198,7 +198,8 @@ def plot_figure(image,cat,wcs,ra_cent,dec_cent,plot_params,contour_data=None):
                 fig.colorbar(colbar)
             
         
-    
+    if return_fig==True:
+        return(fig)
 
     plt.show()
     
