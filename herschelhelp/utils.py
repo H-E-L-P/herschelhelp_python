@@ -68,6 +68,10 @@ def clean_table(table):
         #replace masked floats with nans     
         if table[col].dtype == float:
             table[col].fill_value = np.nan
+        if table[col].dtype == 'float32':
+            table[col].fill_value = np.nan
+        if table[col].dtype == 'float64':
+            table[col].fill_value = np.nan
     
     table = table.filled()
             
