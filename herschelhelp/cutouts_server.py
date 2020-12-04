@@ -144,6 +144,7 @@ def rd_fits(filename, ra, dec, hdrNum=1, width_as=20., pixelscale=None, hdrKey_p
         print("     No fits file available")
         null_image = np.zeros(shape=(10,10), dtype="int8")
         image = null_image
+        return image, None
 
     return image,w
     
