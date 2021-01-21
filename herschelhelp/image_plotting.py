@@ -8,7 +8,7 @@ from astropy.io import ascii, fits
 from astropy.table import Table
 from astropy import units as u
 
-import .cutouts_server as ctts
+from .cutouts_server import cutout_scale
 
 def find_ra_and_dec(colnames):
     '''Finds the ra and dec column names regardless of what case they are in'''
@@ -84,14 +84,14 @@ def image_plot(image,ra,dec,wcs,box_length,fig):
     origin = 'lower'
     
     c = SkyCoord(ra*u.degree,dec*u.degree,unit='deg')
-    length_x, length_y = get_pix_length(image,wcs,box_length,ra_cent,dec_cent)
+    length_x, length_y = get_pix_length(image,wcs,box_length,ra,dec)
     pix_cent_x, pix_cent_y = wcs.wcs_world2pix(ra,dec,0,ra_dec_order=True)
     pixscale = np.array(wcs.wcs_pix2world(0,0,0)) - np.array(wcs.wcs_pix2world(1,1,0))
     imgcut = Cutout2D(image, c, size=[box_length*u.degree,box_length*u.degree], wcs=wcs)
     wcscut = imgcut.wcs
     imgcut = imgcut.data
 
-    vmin, vmax = ctts.cutout_scale(imgcut)
+    vmin, vmax = cutout_scale(imgcut)
     ax = fig.add_subplot(111, projection=wcscut)
 
     ax.imshow(imgcut, vmax=vmax, vmin=vmin, cmap=cmap, interpolation='nearest', origin=origin)
@@ -121,7 +121,7 @@ def contour_plot(data,ra,dec,box_length,ax):
     imgcut = Cutout2D(image, c, size=[box_length*u.degree,box_length*u.degree], wcs=wcs)
     wcscut = imgcut.wcs.celestial
     imgcut = imgcut.data
-    vmin, vmax = ctts.cutout_scale(imgcut)
+    vmin, vmax = cutout_scale(imgcut)
     print('contours are at {}'.format(np.linspace(vmin,vmax,7)))
     
     ax.contour(imgcut,levels=np.linspace(vmin,vmax,7),colors='white',transform=ax.get_transform(wcscut))
@@ -199,7 +199,7 @@ def plot_figure(image,cat,wcs,ra_cent,dec_cent,plot_params,contour_data=None,ret
             
         
     if return_fig==True:
-        return(fig)
+        return(ax)
 
     plt.show()
     
