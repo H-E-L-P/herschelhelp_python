@@ -3,6 +3,7 @@ import logging
 import os
 
 from astropy import units as u
+from astropy.units import UnitConversionError
 
 import numpy as np
 
@@ -101,7 +102,7 @@ def convert_table_for_cigale(catalogue, inplace=False,
         catalogue['f_{}'.format(band)].name = band
         try:
             catalogue[band]=catalogue[band].to(u.mJy)
-        except:
+        except UnitConversionError:
             LOGGER.debug("No units on flux assuming uJy.")
             catalogue[band] /= 1000.  # μJy to mJy
             catalogue[band].unit = u.mJy
@@ -115,7 +116,7 @@ def convert_table_for_cigale(catalogue, inplace=False,
             catalogue['ferr_{}'.format(band)].name = '{}_err'.format(band)
             try:
                 catalogue['{}_err'.format(band)]=catalogue['{}_err'.format(band)].to(u.mJy)
-            except:
+            except UnitConversionError:
                 LOGGER.debug("No units on flux error assuming uJy.")
                 catalogue['{}_err'.format(band)] /= 1000.  # μJy to mJy
                 catalogue['{}_err'.format(band)].unit = u.mJy
