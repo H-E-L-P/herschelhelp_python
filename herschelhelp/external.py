@@ -99,8 +99,12 @@ def convert_table_for_cigale(catalogue, inplace=False,
         # Total flux
         LOGGER.debug("Converting %s flux to mJy.", band)
         catalogue['f_{}'.format(band)].name = band
-        catalogue[band] /= 1000.  # μJy to mJy
-        catalogue[band].unit = u.uJy
+        try:
+            catalogue[band]=catalogue[band].to(u.mJy)
+        except:
+            LOGGER.debug("No units on flux assuming uJy.")
+            catalogue[band] /= 1000.  # μJy to mJy
+            catalogue[band].unit = u.mJy
         if band_flag is not None:
             catalogue[band][band_flag] = np.nan
         columns.append(band)
@@ -109,8 +113,12 @@ def convert_table_for_cigale(catalogue, inplace=False,
         LOGGER.debug("Converting %s flux error to mJy.", band)
         if 'ferr_{}'.format(band) in catalogue.colnames:
             catalogue['ferr_{}'.format(band)].name = '{}_err'.format(band)
-            catalogue['{}_err'.format(band)] /= 1000.  # μJy to mJy
-            catalogue['{}_err'.format(band)].unit = u.uJy
+            try:
+                catalogue['{}_err'.format(band)]=catalogue['{}_err'.format(band)].to(u.mJy)
+            except:
+                LOGGER.debug("No units on flux error assuming uJy.")
+                catalogue['{}_err'.format(band)] /= 1000.  # μJy to mJy
+                catalogue['{}_err'.format(band)].unit = u.mJy
             if band_flag is not None:
                 catalogue['{}_err'.format(band)][band_flag] = np.nan
             columns.append('{}_err'.format(band))
