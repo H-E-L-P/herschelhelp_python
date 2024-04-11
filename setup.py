@@ -41,7 +41,10 @@ setup(
     install_requires=REQUIREMENTS,
     packages=find_packages(),
     package_dir={'herschelhelp': 'herschelhelp'},
-    package_data={'herschelhelp': ['data.db']},
+    package_data={
+        'herschelhelp': ['data.db'],
+        'database_builder': ['fields.txt'],
+    },
     cmdclass={'build_py': CustomBuild},
     entry_points='''
         [console_scripts]
