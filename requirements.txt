@@ -4,4 +4,4 @@ pymoc
 pyvo
 sqlalchemy
 scipy
-astrohelp-utils
+herschelhelp_internal
