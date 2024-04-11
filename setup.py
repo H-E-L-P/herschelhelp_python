@@ -36,6 +36,7 @@ setup(
     author="Yannick Roehlly",
     author_email="yannick.roehlly@lam.fr",
     license='MIT',
+    setup_requires=REQUIREMENTS,
     install_requires=REQUIREMENTS,
     packages=find_packages(),
     package_dir={'herschelhelp': 'herschelhelp'},
