@@ -89,7 +89,10 @@ def add_filters():
                 if field.unit is not None:
                     return field.value * field.unit
                 elif field.datatype == 'char':
-                    return field.value #.decode('utf-8')
+                    if isinstance(field.value, bytes):
+                        return field.value.decode('utf-8')
+                    else:
+                        return field.value
                 else:
                     return field.value
 

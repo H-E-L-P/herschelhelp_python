@@ -15,10 +15,8 @@ run (from within the cloned GitHub repository):
 ```Shell
 $ conda create -n herschelhelp python=3
 $ source activate herschelhelp
-$ conda install astropy click sqlalchemy scipy
-$ pip install -r requirements.txt
-$ python setup.py develop
-$ python database_builder/__init__.py
+$ pip3 install -e herschelhelp/.
+$ python herschelhelp/database_builder/__init__.py
 ```
 
 You will need to activate this new environment with `source activate
