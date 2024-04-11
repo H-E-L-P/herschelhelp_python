@@ -16,6 +16,7 @@ REQUIREMENTS = [
     'pymoc',
     'pyvo',
     'sqlalchemy',
+    'scipy',
 ]
 
 
