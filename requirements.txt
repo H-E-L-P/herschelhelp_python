@@ -4,3 +4,4 @@ pymoc
 pyvo
 sqlalchemy
 scipy
+astrohelp-utils
