@@ -15,8 +15,8 @@ run (from within the cloned GitHub repository):
 ```Shell
 $ conda create -n herschelhelp python=3
 $ source activate herschelhelp
-$ pip3 install -e herschelhelp/.
-$ python herschelhelp/database_builder/__init__.py
+$ pip install -e .
+$ python database_builder/__init__.py
 ```
 
 You will need to activate this new environment with `source activate
