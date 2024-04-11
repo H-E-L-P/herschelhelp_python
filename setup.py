@@ -10,6 +10,7 @@ with open(os.path.join(HERE, 'README.md')) as f:
     README = f.read()
 
 REQUIREMENTS = [
+    'numpy',
     'astropy',
     'click',
     'pymoc',
