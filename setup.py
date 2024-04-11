@@ -3,7 +3,7 @@
 import os
 
 from distutils.command.build_py import build_py
-from setuptools import setup
+from setuptools import setup, find_packages
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 with open(os.path.join(HERE, 'README.md')) as f:
@@ -36,7 +36,7 @@ setup(
     author_email="yannick.roehlly@lam.fr",
     license='MIT',
     install_requires=REQUIREMENTS,
-    packages=['herschelhelp'],
+    packages=find_packages(),
     package_dir={'herschelhelp': 'herschelhelp'},
     package_data={'herschelhelp': ['data.db']},
     cmdclass={'build_py': CustomBuild},
