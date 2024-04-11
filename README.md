@@ -1,25 +1,27 @@
 Herschel Extragalactic Legacy Project python module
 ===================================================
 
-This Python module aims at facilitating the work with HELP data. It also
+This Python module aims at facilitating the working HELP data. It also
 contains tools that are useful while building the project database.
+We also hope that the code may of general use in astronomy projects.
 
 Installation
 ------------
 
-While we are developing HELP, it's better to install the package in development
-mode. Provided you installed [Anaconda](https://www.continuum.io/) or
+Provided you installed [Anaconda](https://www.continuum.io/) or
 [miniconda](http://conda.pydata.org/miniconda.html) here are the commands to
 run (from within the cloned GitHub repository):
 
 ```Shell
 $ conda create -n herschelhelp python=3
-$ source activate herschelhelp
+$ conda activate herschelhelp
 $ pip install -e .
 $ python database_builder/__init__.py
 ```
 
-You will need to activate this new environment with `source activate
+This will install the code in editable mode allowing source files to be updated.
+
+You will need to activate this new environment with `conda activate
 herschelhelp` when you want to use this module or its command.
 
 Command line
