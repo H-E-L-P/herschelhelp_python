@@ -43,6 +43,8 @@ setup(
     package_dir={'herschelhelp': 'herschelhelp'},
     package_data={
         'herschelhelp': ['data.db'],
+        'database_builder/coverages': ['*.fits'],
+        'database_builder/filters': ['*.xml'],
         'database_builder': ['fields.txt'],
     },
     cmdclass={'build_py': CustomBuild},
