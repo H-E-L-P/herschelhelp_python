@@ -83,7 +83,7 @@ jobs:
             python_version: "3.12"
 
     steps:
-      - name: Checkout LePhare
+      - name: Checkout herschelhelp_python
         uses: actions/checkout@v4
         with:
           submodules: recursive
