@@ -1,3 +1,4 @@
 include database_builder/fields.txt
 recursive-include database_builder/coverages *.fits
 recursive-include database_builder/filters *.xml
+include herschelhelp/data.db
