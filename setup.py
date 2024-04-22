@@ -17,6 +17,7 @@ REQUIREMENTS = [
     'pyvo',
     'sqlalchemy',
     'scipy',
+    'herschelhelp-internal',
 ]
 
 
@@ -31,7 +32,7 @@ class CustomBuild(build_py):
 
 setup(
     name="herschelhelp",
-    version="1.0.2",
+    version="1.0.3",
     description="HELP project module",
     long_description=README,
     author="Yannick Roehlly",
