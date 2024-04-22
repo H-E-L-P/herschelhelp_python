@@ -5,4 +5,4 @@ pymoc
 pyvo
 sqlalchemy
 scipy
-herschelhelp_internal
+herschelhelp-internal
