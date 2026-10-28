@@ -33,7 +33,6 @@ class CustomBuild(build_py):
 
 setup(
     name="herschelhelp",
-    version="1.0.3",
     description="HELP project module",
     long_description=README,
     author="Yannick Roehlly",
