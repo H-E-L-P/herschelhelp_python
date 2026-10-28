@@ -13,10 +13,10 @@ Provided you installed [Anaconda](https://www.continuum.io/) or
 run (from within the cloned GitHub repository):
 
 ```Shell
-$ conda create -n herschelhelp python=3
-$ conda activate herschelhelp
-$ pip install -e .
-$ python database_builder/__init__.py
+conda create -n herschelhelp python=3
+conda activate herschelhelp
+pip install -e .
+python database_builder/__init__.py
 ```
 
 This will install the code in editable mode allowing source files to be updated.
@@ -44,13 +44,13 @@ If one need to use this code inside a Jupyter notebook, one should install the
 notebook stuff:
 
 ```Shell
-$ conda install notebook
+conda install notebook
 ```
 
 and add the environment Python to the list of kernels for Jupyter:
 
 ```Shell
-$ python -m ipykernel install --user --name helpext --display-name "Python (herschelhelp_python)"
+python -m ipykernel install --user --name helpext --display-name "Python (herschelhelp_python)"
 ```
 
 The notebooks must be set to use this kernel.
