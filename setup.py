@@ -12,6 +12,7 @@ with open(os.path.join(HERE, 'README.md')) as f:
 REQUIREMENTS = [
     'numpy',
     'astropy',
+    'numpy',
     'click',
     'pymoc',
     'pyvo',
@@ -24,10 +25,10 @@ REQUIREMENTS = [
 class CustomBuild(build_py):
     """Build class to build the database"""
     def run(self):
-        # Build the databse
+        import sys
+        sys.path.insert(0, HERE)
         import database_builder
         database_builder.build_base()
-        # Process with the standard build
         build_py.run(self)
 
 setup(

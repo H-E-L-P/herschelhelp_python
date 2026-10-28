@@ -5,7 +5,6 @@ import os
 
 import numpy as np
 
-import pkg_resources
 
 from sqlalchemy import Column, Float, PickleType, String, Text, create_engine
 from sqlalchemy.ext.declarative import declarative_base
@@ -15,7 +14,9 @@ logging.basicConfig(level=logging.getLevelName(
     os.getenv('LOG_LEVEL', 'WARNING')))
 LOGGER = logging.getLogger(__name__)
 
-DATABASE_FILE = pkg_resources.resource_filename(__name__, "data.db")
+from importlib.resources import files
+DATABASE_FILE = str(files('herschelhelp') / 'data.db')
+
 ENGINE = create_engine('sqlite:///' + DATABASE_FILE, echo=False)
 BASE = declarative_base()
 SESSION = sessionmaker(bind=ENGINE)
@@ -170,7 +171,7 @@ class Database(object):
 
     def close(self):
         """Close the connection to the database."""
-        self.session.close_all()
+        self.session.close()
         LOGGER.debug("Closing the database.")
 
 

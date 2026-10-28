@@ -116,15 +116,15 @@ def add_filters():
             response = np.array([wave.to(u.angstrom).value, transmission])
 
             # Attenuation in the filter / E(B-V)
-            att_ebv = (np.trapz(transmission * _f99_extinction(wave), wave) /
-                       np.trapz(transmission, wave))
+            att_ebv = (np.trapezoid(transmission * _f99_extinction(wave), wave) /
+                       np.trapezoid(transmission, wave))
             att_ebv = np.round(att_ebv, 3)
 
             # Computing the mean wavelength because not all filters may
             # provide it.
             mean_wavelength = (
-                np.trapz(response[1] * response[0], response[0]) /
-                np.trapz(response[1], response[0]))
+                np.trapezoid(response[1] * response[0], response[0]) /
+                np.trapezoid(response[1], response[0]))
 
             # Computing the min and max wavelength with are the first and last
             # wavelength with at least 1% of the maximal transmission (we took
