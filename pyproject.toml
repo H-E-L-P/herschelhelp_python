@@ -1,3 +1,53 @@
 [build-system]
-requires = ["setuptools>=61", "wheel", "numpy", "scipy", "astropy", "sqlalchemy", "pymoc"]
+# The custom build step runs database_builder, so its dependencies
+# must be available in the isolated build environment.
+requires = [
+    "setuptools>=77",
+    "setuptools-scm>=8",
+    "wheel",
+    "numpy",
+    "astropy",
+    "click",
+    "pymoc",
+    "pyvo",
+    "sqlalchemy",
+    "scipy",
+    "herschelhelp-internal",
+]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "herschelhelp"
+dynamic = ["version"]
+description = "HELP project module"
+readme = "README.md"
+license = "MIT"
+authors = [
+    { name = "Yannick Roehlly", email = "yannick.roehlly@lam.fr" },
+]
+requires-python = ">=3.9"
+dependencies = [
+    "numpy",
+    "astropy",
+    "click",
+    "pymoc",
+    "pyvo",
+    "sqlalchemy",
+    "scipy",
+    "herschelhelp-internal",
+]
+
+[project.scripts]
+herschelhelp = "herschelhelp.commands:cli"
+
+[project.urls]
+Homepage = "https://github.com/H-E-L-P/herschelhelp"
+
+[tool.setuptools.packages.find]
+exclude = ["build*", "tests*"]
+
+[tool.setuptools.package-data]
+herschelhelp = ["data.db"]
+database_builder = ["fields.txt", "coverages/*.fits", "filters/*.xml"]
+
+[tool.setuptools_scm]
